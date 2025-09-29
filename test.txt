@@ -1,2 +1,2 @@
-1, 在课堂上很难安静坐好
-2, 经常分心，注意力难以维持
+1. Finds it hard to sit still in class
+2. Easily distracted, attention hard to sustain

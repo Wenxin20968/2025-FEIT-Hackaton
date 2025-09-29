@@ -1,6 +1,6 @@
 import React, {useMemo, useRef, useState, useEffect} from "react";
 
-// ★ 必加：把 React 暴露到全局，供自由模式模块使用
+// ★ 必加：把 React 报露到全局，供自由模式模块使用
 if (typeof window !== "undefined") {
     window.React = window.React || React;
 }
@@ -16,7 +16,7 @@ if (typeof window !== "undefined") {
 export default function ADHDPlayground() {
     const [apiKey, setApiKey] = useState("");
     const [rawScale, setRawScale] = useState("");
-    const [scaleName, setScaleName] = useState("未命名量表");
+    const [scaleName, setScaleName] = useState("Untitled Scale");
     const [theme, setTheme] = useState("animals");
     const [customTokens, setCustomTokens] = useState("🐶 🐱 🐰");
     const [status, setStatus] = useState("idle"); // idle | generating | playing | finished
@@ -34,14 +34,28 @@ export default function ADHDPlayground() {
     // 自由模式：保存 LLM 导出的元信息（规则/标题等） // UPDATE: 新增
     const [freeformMeta, setFreeformMeta] = useState(null);
 
+    const fileInputRef = useRef(null); // 新增：隐藏文件 input 的引用
+
+    const selectedClass =
+        "border-orange-500 bg-orange-50 ring-2 ring-orange-400 " +
+        "outline-none focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-orange-400 " +
+        "active:outline-none active:ring-0 [-webkit-tap-highlight-color:transparent] transition";
+
+    const unselectedClass =
+        "border-slate-200 hover:bg-slate-50 " +
+        "outline-none focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-orange-400 " +
+        "active:outline-none active:ring-0 [-webkit-tap-highlight-color:transparent] transition";
+
+
+
     // 主题预设
     const themes = [
-        {id: "animals", label: "小动物", defaults: "🐶 🐱 🐰 🐼 🦊 🦁"},
-        {id: "plants", label: "植物园", defaults: "🌱 🌿 🌼 🌷 🌵 🍀"},
-        {id: "space", label: "太空", defaults: "🪐 🌟 🚀 👽 🌌 ☄️"},
-        {id: "ocean", label: "海洋", defaults: "🐠 🐳 🐙 🐬 🐚 🦀"},
-        {id: "vehicles", label: "交通", defaults: "🚗 🚌 🚲 🚀 🚃 🚁"},
-        {id: "custom", label: "自定义", defaults: "⭐️ 💡 🎈"},
+        {id: "animals", label: "Zoo", defaults: "🐶 🐱 🐰 🐼 🦊 🦁"},
+        {id: "plants", label: "Botanical", defaults: "🌱 🌿 🌼 🌷 🌵 🍀"},
+        {id: "space", label: "Space", defaults: "🪐 🌟 🚀 👽 🌌 ☄️"},
+        {id: "ocean", label: "Ocean", defaults: "🐠 🐳 🐙 🐬 🐚 🦀"},
+        {id: "vehicles", label: "Vehicles", defaults: "🚗 🚌 🚲 🚀 🚃 🚁"},
+        {id: "custom", label: "Custom", defaults: "⭐️ 💡 🎈"},
     ];
 
     // —— 解析量表
@@ -99,16 +113,16 @@ export default function ADHDPlayground() {
         if (!file) return;
         try {
             const base = file.name.replace(/\.[^.]+$/, "");
-            setScaleName((prev) => (prev && prev !== "未命名量表" ? prev : base));
+            setScaleName((prev) => (prev && prev !== "Untitled Scale" ? prev : base));
             const reader = new FileReader();
             reader.onload = () => {
                 const raw = typeof reader.result === "string" ? reader.result : "";
                 setRawScale(stripBOM(raw));
             };
-            reader.onerror = () => setError("读取文件失败，请确认为 JSON/CSV/TXT 文本文件。");
+            reader.onerror = () => setError("Failed to read file. Make sure it is JSON/CSV/TXT text.");
             reader.readAsText(file, "utf-8");
         } catch (err) {
-            setError(`读取失败：${(err && err.message) || String(err)}`);
+            setError(`Read failed: ${(err && err.message) || String(err)}`);
         } finally {
             e.target.value = "";
         }
@@ -125,7 +139,7 @@ export default function ADHDPlayground() {
         setFreeformMeta(null); // UPDATE: 重置
 
         if (parsedScale.items.length === 0) {
-            setError("请先上传或粘贴量表内容。");
+            setError("Please upload or paste scale items first.");
             return;
         }
 
@@ -137,7 +151,7 @@ export default function ADHDPlayground() {
         // 默认规格（Go/No-Go），时长 12s
         const defaultSpec = {
             template: "goNoGo",
-            name: `${scaleName || "ADHD 任务"} - Go/No-Go`,
+            name: `${scaleName || "ADHD Task"} - Go/No-Go`,
             durationSec: 12,
             isiMs: 1000,
             targetRatio: 0.7,
@@ -147,9 +161,9 @@ export default function ADHDPlayground() {
             scoring: {
                 weights: {commissionErr: 0.5, omissionErr: 0.3, meanRT: 0.2, rtVar: 0.2},
                 advisories: [
-                    {when: "commissionErr>0.25", text: "抑制控制（No-Go）可能存在困难。"},
-                    {when: "omissionErr>0.2", text: "持续注意与专注可能不足。"},
-                    {when: "rtVar>180", text: "反应时波动较大，可能存在注意维持挑战。"},
+                    {when: "commissionErr>0.25", text: "Possible difficulty with inhibitory control (No-Go)."},
+                    {when: "omissionErr>0.2", text: "Sustained attention may be limited."},
+                    {when: "rtVar>180", text: "Reaction time variability is high; attention maintenance may be challenging."},
                 ],
             },
         };
@@ -183,9 +197,9 @@ Prefer varying the template from game to game.`;
                     role: "user",
                     content:
                         `Scale name: ${scaleName}.
-Items: ${parsedScale.items.map((i) => `${i.id}:${i.text}`).join(" | ")}.
-Theme tokens to use: ${safeTokens.join(" ")}.
-要求：严格 JSON，不要解释，不要 Markdown。`,
+                        Items: ${parsedScale.items.map((i) => `${i.id}:${i.text}`).join(" | ")}.
+                        Theme tokens to use: ${safeTokens.join(" ")}.
+                        Requirement: STRICT JSON, no explanations, no Markdown.`,
                 };
 
                 const resp = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -212,7 +226,7 @@ Theme tokens to use: ${safeTokens.join(" ")}.
                         msg = JSON.parse(raw).error?.message || raw;
                     } catch {
                     }
-                    throw new Error(`LLM 请求失败：${resp.status}｜${msg}`);
+                    throw new Error(`LLM request failed: ${resp.status}｜${msg}`);
                 }
                 const data = JSON.parse(raw);
                 const text = data.choices?.[0]?.message?.content || "{}";
@@ -241,13 +255,13 @@ Rules:
 - Props: { onFinish, onCancel, tokens, durationSec } only.
 - You MUST also export: 
     export const meta = {
-      title: "中文标题",
-      rules: ["要点1", "要点2", "要点3"],       // concise Chinese bullet rules shown BEFORE start
-      scoringNotes: "简述如何计算指标（中文）"   // brief note
+      title: "English Title",
+      rules: ["Point 1", "Point 2", "Point 3"],
+      scoringNotes: "Brief note on how metrics are computed (English)."
     };
-    export function explain(metrics) {          // return a short Chinese paragraph for parents
+    export function explain(metrics) {
       // metrics: {hitRate, commissionErr, omissionErr, meanRT, rtVar, composite}
-      return "…";
+      return "Short parent-friendly English summary…";
     }
 - The component MUST call onFinish(metrics) within ~durationSec seconds.
 - Keep code < 300 lines. Keep UI simple but playable.`;
@@ -278,19 +292,19 @@ Language: Chinese UI labels.`,
                         msg = JSON.parse(raw).error?.message || raw;
                     } catch {
                     }
-                    throw new Error(`LLM 请求失败：${resp.status}｜${msg}`);
+                    throw new Error(`LLM request failed: ${resp.status}｜${msg}`);
                 }
                 const data = JSON.parse(raw);
                 const code = data.choices?.[0]?.message?.content?.trim();
                 if (!code || !/export\s+default/.test(code)) {
-                    throw new Error("返回内容不含有效的 default 导出组件");
+                    throw new Error("Returned content has no valid default-exported component");
                 }
                 setAiGameCode(code);
                 setStatus("playing");
             }
         } catch (e) {
             console.error(e);
-            setError(`生成失败：${e.message}。已回退到本地默认规格。`);
+            setError(`Generation failed: ${e.message}. Fell back to local default template.`);
             setGameSpec(defaultSpec);
             setStatus("playing");
         }
@@ -301,17 +315,17 @@ Language: Chinese UI labels.`,
         if (!metrics) return;
         if (!apiKey) { // 本地回退
             const msgs = [];
-            if (metrics.commissionErr > 0.25) msgs.push("No-Go 抑制错误较多");
-            if (metrics.omissionErr > 0.2) msgs.push("遗漏率较高（可能专注不足）");
-            if (metrics.rtVar > 180) msgs.push("反应时波动偏大");
-            setReportText(`【非医疗结论】小游戏显示：${msgs.join("；") || "整体表现稳定"}。建议结合正式量表与专业评估综合判断。`);
+            if (metrics.commissionErr > 0.25) msgs.push("More false taps on No-Go");
+            if (metrics.omissionErr > 0.2) msgs.push("Higher misses (possible focus difficulties)");
+            if (metrics.rtVar > 180) msgs.push("Larger reaction time variability");
+            setReportText(`[Non-diagnostic note] Mini-game suggests: ${msgs.join("; ") || "overall stable performance"}. Please pair with validated scales and professional evaluation for decisions.`);
             return;
         }
         try {
-            const sys = `You are a clinician-assistant. Write a short, empathetic, non-diagnostic summary for parents (Chinese), based on Go/No-Go or Oddball metrics. Avoid medical claims.`;
+            const sys = `You are a clinician-assistant. Write a short, empathetic, non-diagnostic summary for parents (English), based on Go/No-Go or Oddball metrics. Avoid medical claims.`;
             const u = {
                 role: "user",
-                content: `Metrics: ${JSON.stringify(metrics)}\n请用中文，以 2-4 句短段落，避免诊断性词汇，给出温和建议。`
+                content: `Metrics: ${JSON.stringify(metrics)}\nPlease write 2–4 short sentences in English with gentle suggestions, avoiding diagnostic language.`
             };
             const resp = await fetch("https://api.openai.com/v1/chat/completions", {
                 method: "POST",
@@ -329,14 +343,14 @@ Language: Chinese UI labels.`,
                     msg = JSON.parse(raw).error?.message || raw;
                 } catch {
                 }
-                throw new Error(`LLM 请求失败：${resp.status}｜${msg}`);
+                throw new Error(`LLM request failed: ${resp.status}｜${msg}`);
             }
             const data = JSON.parse(raw);
             const text = data.choices?.[0]?.message?.content?.trim() || "";
             setReportText(text);
         } catch (e) {
             setReportText(
-                `【本地摘要】感谢参与。小游戏指标显示：抑制错误 ${(metrics.commissionErr * 100).toFixed(1)}%，遗漏 ${(metrics.omissionErr * 100).toFixed(1)}%，平均反应时 ${metrics.meanRT.toFixed(0)}ms。建议结合正式量表与专业评估。`
+                `[Local summary] Thanks for playing. Mini-game metrics: commission ${(metrics.commissionErr * 100).toFixed(1)}%, omission ${(metrics.omissionErr * 100).toFixed(1)}%, mean RT ${metrics.meanRT.toFixed(0)}ms. Consider using validated scales and professional evaluation together.`
             );
         }
     }
@@ -344,43 +358,71 @@ Language: Chinese UI labels.`,
     return (
         <div className="min-h-screen bg-[#fff8dc] text-slate-800 flex flex-col items-center">
             <header className="text-center px-4 py-6">
-                <h1 className="text-2xl md:text-3xl font-bold">ADHD 个性化趣味检测 · 小游戏生成器</h1>
-                <p className="text-sm text-slate-600 mt-1">仅作教育与预筛查辅助展示，不能替代专业诊断。</p>
+                <h1 className="text-2xl md:text-3xl font-bold">ADHD Personalized Fun Check · Game Generator</h1>
+                <p className="text-sm text-slate-600 mt-1">For education and pre-screening only; not a medical diagnosis.</p>
             </header>
 
-            <main className="w-full px-4 py-10 md:py-16 flex flex-col gap-8">
-            {/* 配置卡片 */}
+            <main className="w-full px-4 py-2 md:py-6 flex flex-col gap-8">
+                {/* 配置卡片 */}
                 {status !== "playing" && (
                     <section className="w-full max-w-5xl mx-auto grid gap-4 md:grid-cols-[2fr_1fr]">
                         {/* 左：量表输入 */}
                         <div className="bg-white rounded-2xl shadow p-4">
-                            <h2 className="font-semibold mb-2">1) 上传或粘贴量表</h2>
-                            <input type="file" accept=".json,.csv,.txt" onChange={handleFileUpload}
-                                   className="border rounded-lg px-3 py-2"/>
-                            <div className="flex gap-2 items-center mb-2 mt-2">
-                                <input className="border rounded-lg px-3 py-2 w-1/2" placeholder="量表名称（可选）"
-                                       value={scaleName} onChange={(e) => setScaleName(e.target.value)}/>
-                                <label className="text-xs text-slate-500">支持 JSON / CSV / 每行一题</label>
+                            <h2 className="font-semibold mb-2">Upload or paste scale</h2>
+
+                            {/* 一行：按钮触发上传 + 文件名输入框 */}
+                            <div className="flex gap-2 items-center mb-2 mt-1">
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept=".json,.csv,.txt"
+                                    onChange={handleFileUpload}
+                                    className="hidden"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="rounded-lg border px-3 py-2 hover:bg-slate-50"
+                                >
+                                    Choose file…
+                                </button>
+                                <input
+                                    className="border rounded-lg px-3 py-2 flex-1"
+                                    placeholder="Scale name (optional)"
+                                    value={scaleName}
+                                    onChange={(e) => setScaleName(e.target.value)}
+                                />
                             </div>
-                            <textarea className="w-full h-48 border rounded-xl p-3 font-mono text-sm"
-                                      placeholder={`示例（每行一题）：\n1, 在课堂上很难安静坐好\n2, 经常分心，注意力难以维持\n...`}
-                                      value={rawScale} onChange={(e) => setRawScale(e.target.value)}/>
+
+                            <div className="flex gap-2 items-center mb-2">
+                                <label className="text-xs text-slate-500">Supports JSON / CSV / one item per line</label>
+                            </div>
+
+                            <textarea
+                                className="w-full h-48 border rounded-xl p-3 font-mono text-sm"
+                                placeholder={`Example (one per line):\n1. Finds it hard to sit still in class\n2. Easily distracted, attention hard to sustain\n...`}
+                                value={rawScale}
+                                onChange={(e) => setRawScale(e.target.value)}
+                            />
                             <div className="flex flex-wrap gap-2 mt-2 text-xs text-slate-600">
-                                <span>已解析条目：{parsedScale.items.length} 条</span>
+                                <span>Parsed items: {parsedScale.items.length}</span>
                                 {parsedScale.items.length > 0 && (
-                                    <span
-                                        className="truncate">示例：{parsedScale.items.slice(0, 3).map((i) => i.text).join(" / ")}{parsedScale.items.length > 3 ? "..." : ""}</span>
+                                    <span className="truncate">
+                                        Example: {parsedScale.items.slice(0, 3).map((i) => i.text).join(" / ")}
+                                        {parsedScale.items.length > 3 ? "..." : ""}
+                                    </span>
                                 )}
                             </div>
                         </div>
 
                         {/* 右：主题 & API Key & 模式 */}
                         <div className="bg-white rounded-2xl shadow p-4">
-                            <h2 className="font-semibold mb-2">2) 选择主题元素</h2>
+                            <h2 className="font-semibold mb-2">Choose theme tokens</h2>
                             <div className="grid grid-cols-2 gap-4 mb-2">
                                 {themes.map((t) => (
                                     <button key={t.id} onClick={() => setTheme(t.id)}
-                                            className={`rounded-xl border px-3 py-3 text-center w-full ${theme === t.id ? "border-sky-500 bg-sky-50" : "hover:bg-slate-50"}`}>
+                                            className={`rounded-xl border px-3 py-3 text-center w-full ${theme === t.id ? selectedClass : unselectedClass}`}
+                                    >
                                         <div className="text-sm font-medium">{t.label}</div>
                                         <div className="text-lg mt-1">{t.defaults}</div>
                                     </button>
@@ -389,44 +431,47 @@ Language: Chinese UI labels.`,
 
                             {theme === "custom" && (
                                 <div className="mt-2">
-                                    <label className="text-sm">自定义元素（用空格分隔，支持 emoji / 词语）</label>
+                                    <label className="text-sm">Custom tokens (space-separated; emoji or words)</label>
                                     <input className="mt-1 w-full border rounded-lg px-3 py-2" value={customTokens}
                                            onChange={(e) => setCustomTokens(e.target.value)}/>
                                 </div>
                             )}
 
                             <div className="mt-4">
-                                <h3 className="font-semibold mb-1">玩法模式</h3>
+                                <h3 className="font-semibold mb-1">Mode</h3>
                                 <div className="grid grid-cols-2 gap-2 text-sm">
                                     <button
-                                        className={`rounded-lg border px-3 py-2 ${mode === "template" ? "border-sky-500 bg-sky-50" : "hover:bg-slate-50"}`}
-                                        onClick={() => setMode("template")}>固定模板（稳妥）
+                                        className={`rounded-lg border px-3 py-2 ${mode === "template" ? selectedClass : unselectedClass}`}
+                                        onClick={() => setMode("template")}
+                                    >Template (stable)
                                     </button>
                                     <button
-                                        className={`rounded-lg border px-3 py-2 ${mode === "freeform" ? "border-violet-500 bg-violet-50" : "hover:bg-slate-50"}`}
-                                        onClick={() => setMode("freeform")}>自由生成（每次不同）
+                                        className={`rounded-lg border px-3 py-2 ${mode === "freeform" ? selectedClass : unselectedClass}`}
+                                        onClick={() => setMode("freeform")}
+                                    >Freeform (varies)
                                     </button>
                                 </div>
-                                <p className="text-xs text-slate-500 mt-1">自由生成会让 AI 输出完整的小游戏 React
-                                    组件，并附带“规则”和“解释函数”。</p>
+                                <p className="text-xs text-slate-500 mt-1">
+                                    Freeform asks the AI to output a complete game React component with “rules” and an “explain” function.
+                                </p>
                             </div>
 
                             <div className="mt-4">
-                                <h3 className="font-semibold mb-1">（可选）粘贴 ChatGPT API Key</h3>
+                                <h3 className="font-semibold mb-1">(Optional) Paste your ChatGPT API Key</h3>
                                 <input className="w-full border rounded-lg px-3 py-2" type="password"
-                                       placeholder="sk-...（仅用于本地浏览器内存）" value={apiKey}
+                                       placeholder="sk-... (kept in local memory only)" value={apiKey}
                                        onChange={(e) => setApiKey(e.target.value)}/>
-                                <p className="text-xs text-slate-500 mt-1">未填也可运行：将使用本地默认模板生成小游戏。</p>
+                                <p className="text-xs text-slate-500 mt-1">You can run without a key: a local default template will be used.</p>
                             </div>
 
                             <button onClick={handleGenerateSpec}
-                                    className="mt-4 w-full rounded-xl bg-sky-600 text-white py-2 font-semibold shadow hover:bg-sky-700"
+                                    className="mt-4 w-full rounded-xl bg-sky-600 text-black py-2 font-semibold shadow hover:bg-sky-700"
                                     disabled={status === "generating"}>
-                                {status === "generating" ? "正在生成…" : "3) 生成小游戏"}
+                                {status === "generating" ? "Generating…" : "Generate game"}
                             </button>
 
                             {error && <p className="text-sm text-rose-600 mt-2">{error}</p>}
-                            {runtimeErr && <p className="text-sm text-rose-600 mt-2">运行错误：{runtimeErr}</p>}
+                            {runtimeErr && <p className="text-sm text-rose-600 mt-2">Runtime error: {runtimeErr}</p>}
                         </div>
                     </section>
                 )}
@@ -446,7 +491,7 @@ Language: Chinese UI labels.`,
                                     onCancel={() => setStatus("idle")}
                                 />
                             ) : (
-                                <p className="text-sm text-rose-600">未取得模板规格。</p>
+                                <p className="text-sm text-rose-600">No template spec available.</p>
                             )
                         ) : aiGameCode ? (
                             <DynamicGameRunner
@@ -458,13 +503,13 @@ Language: Chinese UI labels.`,
                                 onCancel={() => setStatus("idle")}
                                 fallbackTokens={tokensForPlay}
                                 durationSec={12}
-                                onError={(msg) => setRuntimeErr(String(msg || "未知错误"))}
+                                onError={(msg) => setRuntimeErr(String(msg || "Unknown error"))}
                                 onExplainText={(text) => setReportText(text)}           // UPDATE: 接收自由模式解释
                                 onMeta={(meta) => setFreeformMeta(meta)}                 // UPDATE: 接收自由模式规则/标题
                                 fallbackExplain={(m) => handleExplainResult(m)}          // UPDATE: 缺失 explain 时的回退
                             />
                         ) : (
-                            <p className="text-sm text-slate-600">正在准备自由生成小游戏…</p>
+                            <p className="text-sm text-slate-600">Preparing freeform game…</p>
                         )}
                     </section>
                 )}
@@ -472,18 +517,18 @@ Language: Chinese UI labels.`,
                 {status === "finished" && (
                     <section className="w-full max-w-5xl mx-auto grid gap-4 md:grid-cols-2">
                         <div className="bg-white rounded-2xl shadow p-4">
-                            <h2 className="font-semibold">结果指标</h2>
+                            <h2 className="font-semibold">Results</h2>
                             {gameResult ? (
                                 <ul className="mt-2 text-sm leading-7">
-                                    <li>命中率（目标正确点击）：{(gameResult.hitRate * 100).toFixed(1)}%</li>
-                                    <li>误击（不应点却点了）：{(gameResult.commissionErr * 100).toFixed(1)}%</li>
-                                    <li>遗漏（应点未点）：{(gameResult.omissionErr * 100).toFixed(1)}%</li>
-                                    <li>平均反应时：{gameResult.meanRT.toFixed(0)} ms</li>
-                                    <li>反应时波动（SD）：{gameResult.rtVar.toFixed(0)} ms</li>
-                                    <li>综合分：{gameResult.composite.toFixed(1)} / 100</li>
+                                    <li>Hit rate (correct on targets): {(gameResult.hitRate * 100).toFixed(1)}%</li>
+                                    <li>Commission errors (tapped on No-Go): {(gameResult.commissionErr * 100).toFixed(1)}%</li>
+                                    <li>Omission errors (missed targets): {(gameResult.omissionErr * 100).toFixed(1)}%</li>
+                                    <li>Mean reaction time: {gameResult.meanRT.toFixed(0)} ms</li>
+                                    <li>RT variability (SD): {gameResult.rtVar.toFixed(0)} ms</li>
+                                    <li>Composite score: {gameResult.composite.toFixed(1)} / 100</li>
                                 </ul>
                             ) : (
-                                <p className="text-sm">暂无。</p>
+                                <p className="text-sm">No data.</p>
                             )}
                             <div className="mt-4 flex gap-2">
                                 <button className="rounded-xl border px-4 py-2 hover:bg-slate-50"
@@ -492,7 +537,7 @@ Language: Chinese UI labels.`,
                                             setGameResult(null);
                                             setReportText("");
                                         }}>
-                                    再次游玩
+                                    Play again
                                 </button>
                                 <button className="rounded-xl border px-4 py-2 hover:bg-slate-50"
                                         onClick={() => {
@@ -501,15 +546,15 @@ Language: Chinese UI labels.`,
                                             setAiGameCode("");
                                             setFreeformMeta(null);
                                         }}>
-                                    返回配置
+                                    Back to setup
                                 </button>
                             </div>
                         </div>
 
                         <div className="bg-white rounded-2xl shadow p-4">
-                            <h2 className="font-semibold">结果解释（非诊断）</h2>
-                            <p className="text-sm whitespace-pre-wrap mt-2 min-h-24">{reportText || "正在生成…"}</p>
-                            <p className="text-xs text-slate-500 mt-4">重要声明：本工具仅作为趣味化预筛查与亲子互动的辅助手段，不能替代临床诊断或专业评估。</p>
+                            <h2 className="font-semibold">Interpretation (non-diagnostic)</h2>
+                            <p className="text-sm whitespace-pre-wrap mt-2 min-h-24">{reportText || "Generating…"}</p>
+                            <p className="text-xs text-slate-500 mt-4">Important: This tool is for playful pre-screening and parent-child interaction. It does not replace clinical diagnosis or professional evaluation.</p>
                         </div>
                     </section>
                 )}
@@ -704,17 +749,16 @@ function GameRunner({spec, onFinish, onCancel}) {
                 <div>
                     <h2 className="font-semibold">{name}</h2>
                     <p className="text-sm text-slate-500">
-                        时长约 {durationSec}s · 每 {isiMs}ms 刺激一次 ·{" "}
+                        ~{durationSec}s · {isiMs}ms per stimulus ·{" "}
                         {template === "goNoGo" ? (
-                            <>提示：看到 <span className="font-medium">{spec.noGoToken || "🚫"}</span> 不要点击</>
+                            <>Tip: when you see <span className="font-medium">{spec.noGoToken || "🚫"}</span>, do NOT tap</>
                         ) : (
-                            <>提示：只有看到 <span
-                                className="font-medium">{spec.targetToken || spec.tokens?.[0] || "⭐"}</span> 才点击</>
+                            <>Tip: tap ONLY on <span className="font-medium">{spec.targetToken || spec.tokens?.[0] || "⭐"}</span></>
                         )}
                     </p>
                 </div>
                 <div className="flex gap-2">
-                    <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={onCancel}>返回</button>
+                    <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={onCancel}>Back</button>
                 </div>
             </div>
 
@@ -723,20 +767,23 @@ function GameRunner({spec, onFinish, onCancel}) {
             {running && (
                 <div className="mt-6">
                     <div className="flex items-center justify-between text-sm text-slate-600">
-                        <span>剩余时间：{timeLeft}s</span>
+                        <span>Time left: {timeLeft}s</span>
                         {template === "goNoGo"
-                            ? <span>提示：看到 {spec.noGoToken || "🚫"} 不要点击</span>
-                            : <span>提示：只在 {spec.targetToken || spec.tokens?.[0] || "⭐"} 时点击</span>}
+                            ? <span>Remember: do NOT tap {spec.noGoToken || "🚫"}</span>
+                            : <span>Remember: tap only {spec.targetToken || spec.tokens?.[0] || "⭐"}</span>}
                     </div>
                     <div className="mt-4 grid place-items-center">
-                        <button onClick={handleTap}
-                                className="select-none w-56 h-56 text-7xl rounded-3xl bg-gradient-to-b from-sky-50 to-sky-100 border shadow-inner active:translate-y-[1px]">
-                            <span>{current?.token ?? ""}</span>
+                        <button
+                            onClick={handleTap}
+                            className="select-none w-56 h-56 flex items-center justify-center rounded-3xl bg-gradient-to-b from-sky-50 to-sky-100 border shadow-inner active:translate-y-[1px]"
+                        >
+                            <span className="text-[9rem] leading-none">{current?.token ?? ""}</span>
                         </button>
                     </div>
                     <p className="text-center text-slate-500 mt-4">
-                        {template === "goNoGo" ? <>快速点击非 {spec.noGoToken || "🚫"} 的可爱元素！</>
-                            : <>只在看到 {spec.targetToken || spec.tokens?.[0] || "⭐"} 时点击！</>}
+                        {template === "goNoGo"
+                            ? <>Quickly tap the cute items that are NOT {spec.noGoToken || "🚫"}!</>
+                            : <>Tap only when you see {spec.targetToken || spec.tokens?.[0] || "⭐"}!</>}
                     </p>
                 </div>
             )}
@@ -748,7 +795,7 @@ function TemplateCountdownPanel({running, countdown}) {
     if (running) return null;
     return (
         <div className="mt-6 text-center">
-            <p className="text-lg">准备开始…</p>
+            <p className="text-lg">Get ready…</p>
             <p className="text-5xl mt-2 font-bold">{countdown || 0}</p>
         </div>
     );
@@ -882,7 +929,7 @@ function DynamicGameRunner({
                 const wrapped = `${prologue}\n${cleaned}`;
 
                 const mod = await importModuleFromString(wrapped);
-                if (!mod?.default) throw new Error("模块未导出 default 组件");
+                if (!mod?.default) throw new Error("Module did not export a default component");
 
                 if (mounted) {
                     setComp(() => mod.default);
@@ -922,10 +969,10 @@ function DynamicGameRunner({
     if (err) {
         return (
             <div className="bg-white rounded-2xl shadow p-4">
-                <h2 className="font-semibold">运行失败</h2>
+                <h2 className="font-semibold">Failed to run</h2>
                 <p className="text-sm text-rose-600 mt-2">{err}</p>
                 <div className="mt-3">
-                    <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={onCancel}>返回</button>
+                    <button className="rounded-xl border px-4 py-2 hover:bg-slate-50" onClick={onCancel}>Back</button>
                 </div>
             </div>
         );
@@ -937,28 +984,27 @@ function DynamicGameRunner({
             <div className="bg-white rounded-2xl shadow p-4 text-left">
                 <div className="flex items-start justify-between">
                     <div>
-                        <h2 className="font-semibold">{meta?.title || "自由生成小游戏"}</h2>
-                        <p className="text-xs text-slate-500 mt-1">时长 ≤ {durationSec}s</p>
+                        <h2 className="font-semibold">{meta?.title || "Freeform Game"}</h2>
+                        <p className="text-xs text-slate-500 mt-1">Duration ≤ {durationSec}s</p>
                     </div>
-                    <button className="rounded-xl border px-3 py-1 text-sm hover:bg-slate-50" onClick={onCancel}>返回
-                    </button>
+                    <button className="rounded-xl border px-3 py-1 text-sm hover:bg-slate-50" onClick={onCancel}>Back</button>
                 </div>
                 <div className="mt-3">
-                    <h3 className="text-sm font-semibold">规则</h3>
+                    <h3 className="text-sm font-semibold">Rules</h3>
                     {Array.isArray(meta?.rules) && meta.rules.length > 0 ? (
                         <ul className="list-disc pl-6 mt-1 text-sm">
                             {meta.rules.map((r, i) => <li key={i}>{r}</li>)}
                         </ul>
                     ) : (
-                        <p className="text-sm text-slate-600">开始前请根据屏幕提示进行操作；计时到达后自动结束。</p>
+                        <p className="text-sm text-slate-600">Follow on-screen instructions; the game ends automatically when time is up.</p>
                     )}
-                    {meta?.scoringNotes && <p className="text-xs text-slate-500 mt-2">评分提示：{meta.scoringNotes}</p>}
+                    {meta?.scoringNotes && <p className="text-xs text-slate-500 mt-2">Scoring notes: {meta.scoringNotes}</p>}
                 </div>
                 <div className="mt-4">
                     <button
                         className="rounded-xl bg-violet-600 text-white px-4 py-2 font-semibold shadow hover:bg-violet-700"
                         onClick={handleStart}>
-                        开始游戏
+                        Start
                     </button>
                 </div>
             </div>
@@ -966,7 +1012,7 @@ function DynamicGameRunner({
     }
 
     if (!Comp) {
-        return <div className="bg-white rounded-2xl shadow p-4 text-sm text-slate-600">正在加载小游戏模块…</div>;
+        return <div className="bg-white rounded-2xl shadow p-4 text-sm text-slate-600">Loading game module…</div>;
     }
 
     // 真正开始后，隐藏“开始”按钮，仅渲染游戏组件

@@ -1,82 +1,89 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小小探险家 - Little Explorer Adventure</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div id="game-container">
-        <div id="game-header">
-            <h1>🌍 小小探险家</h1>
-            <div id="player-stats">
-                <div class="stat">
-                    <span class="stat-label">星星:</span>
-                    <span id="stars-count">0</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">徽章:</span>
-                    <span id="badges-count">0</span>
-                </div>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Little Explorer - Level Selection</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="main-menu">
+      <div class="header">
+        <h1>🌍 Little Explorer</h1>
+        <p class="subtitle">Adventure Game</p>
+      </div>
+
+      <div class="game-description">
+        <h2>Welcome to the Adventure World!</h2>
+        <p>
+          Help the little explorer complete four challenging levels, each
+          testing different abilities.
+        </p>
+        <p>
+          After completing all levels, you'll receive a professional assessment
+          report!
+        </p>
+      </div>
+
+      <div class="level-selection">
+        <h3>Choose Your Adventure Level:</h3>
+
+        <div class="level-grid">
+          <a href="forest.html" class="level-card">
+            <div class="level-icon">🌲</div>
+            <h4>Magic Forest</h4>
+            <p>Attention Test</p>
+            <div class="level-description">
+              Follow the guide through the forest, resist distractions from
+              butterflies and small animals, test your focus!
             </div>
-        </div>
-        
-        <div id="game-screen">
-            <canvas id="game-canvas" width="800" height="600"></canvas>
-        </div>
-        
-        <div id="game-ui">
-            <div id="level-info">
-                <h2 id="level-title">选择关卡开始冒险</h2>
-                <p id="level-description">帮助小探险家完成四个关卡的挑战！</p>
+          </a>
+
+          <a href="library.html" class="level-card">
+            <div class="level-icon">📚</div>
+            <h4>Ancient Library</h4>
+            <p>Organization Test</p>
+            <div class="level-description">
+              Organize your backpack, collect school supplies, avoid being
+              distracted by toys and snacks!
             </div>
-            
-            <div id="level-buttons">
-                <button class="level-btn" data-level="forest">
-                    🌲 魔法森林<br><small>注意力测试</small>
-                </button>
-                <button class="level-btn" data-level="library">
-                    📚 古老书院<br><small>组织能力测试</small>
-                </button>
-                <button class="level-btn" data-level="river">
-                    🌉 耐心之河<br><small>冲动控制测试</small>
-                </button>
-                <button class="level-btn" data-level="tower">
-                    🏰 智慧之塔<br><small>执行功能测试</small>
-                </button>
+          </a>
+
+          <a href="river.html" class="level-card">
+            <div class="level-icon">🌉</div>
+            <h4>Patience River</h4>
+            <p>Impulse Control Test</p>
+            <div class="level-description">
+              Wait for traffic lights, cross the bridge safely, learn to control
+              impulses and develop patience!
             </div>
-            
-            <div id="game-controls" style="display: none;">
-                <button id="start-level">开始挑战</button>
-                <button id="pause-game">暂停</button>
-                <button id="back-to-menu">返回菜单</button>
+          </a>
+
+          <a href="tower.html" class="level-card">
+            <div class="level-icon">🏰</div>
+            <h4>Wisdom Tower</h4>
+            <p>Executive Function Test</p>
+            <div class="level-description">
+              Memorize number sequences, light up tower levels in order, train
+              memory and executive function!
             </div>
+          </a>
         </div>
-        
-        <div id="results-screen" style="display: none;">
-            <h2>🎉 关卡完成！</h2>
-            <div id="level-results"></div>
-            <button id="next-level">下一关</button>
-            <button id="view-report">查看报告</button>
-        </div>
-        
-        <div id="final-report" style="display: none;">
-            <h2>📊 探险报告</h2>
-            <div id="report-content"></div>
-            <button id="restart-game">重新开始</button>
-        </div>
+      </div>
+
+      <div class="menu-actions">
+        <a href="report.html" class="btn btn-secondary">View Report</a>
+        <button onclick="showHelp()" class="btn btn-help">❓ Help</button>
+      </div>
+
+      <div class="footer">
+        <p>
+          After completing all levels, the system will generate a professional
+          ADHD assessment report
+        </p>
+      </div>
     </div>
-    
-    <script src="js/game.js"></script>
-    <script src="js/levels/forest.js"></script>
-    <script src="js/levels/library.js"></script>
-    <script src="js/levels/river.js"></script>
-    <script src="js/levels/tower.js"></script>
-    <script src="js/data-collection.js"></script>
-    <script src="js/report-generator.js"></script>
+
     <script src="js/main.js"></script>
-</body>
+  </body>
 </html>
-
-

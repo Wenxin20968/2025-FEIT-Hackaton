@@ -1,4 +1,4 @@
-// 数据收集器类
+// Data Collector Class
 class DataCollector {
     constructor() {
         this.data = {
@@ -31,7 +31,7 @@ class DataCollector {
         this.startTime = Date.now();
     }
     
-    // 注意力数据收集
+    // Attention data collection
     recordAttentionData(type, value) {
         switch(type) {
             case 'wrongPath':
@@ -49,7 +49,7 @@ class DataCollector {
         }
     }
     
-    // 组织能力数据收集
+    // Organization data collection
     recordOrganizationData(type, value) {
         switch(type) {
             case 'missedItem':
@@ -67,7 +67,7 @@ class DataCollector {
         }
     }
     
-    // 冲动控制数据收集
+    // Impulse control data collection
     recordImpulseData(type, value) {
         switch(type) {
             case 'prematureClick':
@@ -85,7 +85,7 @@ class DataCollector {
         }
     }
     
-    // 执行功能数据收集
+    // Executive function data collection
     recordExecutiveData(type, value) {
         switch(type) {
             case 'correctAnswer':
@@ -107,7 +107,7 @@ class DataCollector {
         }
     }
     
-    // 计算ADHD评估分数
+    // Calculate ADHD assessment score
     calculateADHDScores() {
         const scores = {
             attention: this.calculateAttentionScore(),
@@ -127,34 +127,34 @@ class DataCollector {
         const attention = this.data.attention;
         let score = 0;
         
-        // 基于错误路径数量
+        // Based on wrong path count
         score += Math.min(attention.wrongPaths * 2, 10);
         
-        // 基于分心次数
+        // Based on distraction count
         score += Math.min(attention.distractions * 1.5, 8);
         
-        // 基于反应时间（越慢分数越高）
+        // Based on reaction time (slower = higher score)
         if (attention.reactionTime.length > 0) {
             const avgReactionTime = attention.reactionTime.reduce((a, b) => a + b, 0) / attention.reactionTime.length;
             if (avgReactionTime > 2000) score += 5;
             else if (avgReactionTime > 1500) score += 3;
         }
         
-        return Math.min(score, 18); // ADHD-RS-IV 最高18分
+        return Math.min(score, 18); // ADHD-RS-IV maximum 18 points
     }
     
     calculateHyperactivityScore() {
         const impulse = this.data.impulse;
         let score = 0;
         
-        // 基于过早点击次数
+        // Based on premature click count
         score += Math.min(impulse.prematureClicks * 2, 8);
         
-        // 基于点击频率
+        // Based on click frequency
         if (impulse.clickFrequency > 20) score += 5;
         else if (impulse.clickFrequency > 10) score += 3;
         
-        // 基于等待时间
+        // Based on waiting time
         if (impulse.waitingTime.length > 0) {
             const avgWaitingTime = impulse.waitingTime.reduce((a, b) => a + b, 0) / impulse.waitingTime.length;
             if (avgWaitingTime < 1000) score += 5;
@@ -167,11 +167,11 @@ class DataCollector {
         const impulse = this.data.impulse;
         let score = 0;
         
-        // 基于成功率
+        // Based on success rate
         if (impulse.successRate < 0.7) score += 8;
         else if (impulse.successRate < 0.8) score += 5;
         
-        // 基于过早点击
+        // Based on premature clicks
         score += Math.min(impulse.prematureClicks * 1.5, 6);
         
         return Math.min(score, 18);
@@ -181,17 +181,17 @@ class DataCollector {
         const executive = this.data.executive;
         let score = 0;
         
-        // 基于正确率
+        // Based on accuracy rate
         if (executive.totalAnswers > 0) {
             const accuracy = executive.correctAnswers / executive.totalAnswers;
             if (accuracy < 0.6) score += 8;
             else if (accuracy < 0.8) score += 5;
         }
         
-        // 基于分心事件
+        // Based on distraction events
         score += Math.min(executive.distractionEvents * 2, 6);
         
-        // 基于记忆准确性
+        // Based on memory accuracy
         if (executive.memoryAccuracy < 0.7) score += 4;
         
         return Math.min(score, 18);
@@ -209,23 +209,23 @@ class DataCollector {
         const recommendations = [];
         
         if (scores.attention > 12) {
-            recommendations.push("建议进行注意力训练，如专注力游戏或冥想练习");
+            recommendations.push("Recommended to perform attention training, such as focus games or meditation exercises");
         }
         
         if (scores.hyperactivity > 12) {
-            recommendations.push("建议增加体育活动，帮助释放多余能量");
+            recommendations.push("Recommended to increase physical activities to help release excess energy");
         }
         
         if (scores.impulsivity > 12) {
-            recommendations.push("建议进行冲动控制训练，如深呼吸练习");
+            recommendations.push("Recommended to perform impulse control training, such as deep breathing exercises");
         }
         
         if (scores.executive > 12) {
-            recommendations.push("建议进行执行功能训练，如任务规划和记忆游戏");
+            recommendations.push("Recommended to perform executive function training, such as task planning and memory games");
         }
         
         if (recommendations.length === 0) {
-            recommendations.push("表现良好，继续保持！");
+            recommendations.push("Good performance, keep it up!");
         }
         
         return recommendations;

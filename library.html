@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ancient Library - Organization Test</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="game-container">
+      <div id="game-header">
+        <h1>📚 Ancient Library - Organization Test</h1>
+        <div id="player-stats">
+          <div class="stat">
+            <span class="stat-label">Stars:</span>
+            <span id="stars-count">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Collected:</span>
+            <span id="collected-count">0/5</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <a href="index.html" class="btn btn-back">🏠 Back to Home</a>
+          <button id="pause-game" class="btn btn-pause">⏸️ Pause</button>
+        </div>
+      </div>
+
+      <div id="game-screen">
+        <canvas id="game-canvas" width="800" height="600"></canvas>
+      </div>
+
+      <div id="game-instructions">
+        <h3>🎯 Game Instructions</h3>
+        <p>Drag school supplies to the backpack area!</p>
+        <p>⚠️ Attention: Don't be distracted by toys and snacks!</p>
+        <div id="progress-info">
+          <p>Time Left: <span id="time-left">30</span>s</p>
+          <p>Missed Items: <span id="missed-count">0</span></p>
+        </div>
+      </div>
+
+      <div id="results-screen" style="display: none">
+        <h2>🎉 Level Complete!</h2>
+        <div id="level-results"></div>
+        <div class="result-actions">
+          <a href="river.html" class="btn btn-primary"
+            >Next Level: Patience River</a
+          >
+          <a href="index.html" class="btn btn-secondary">Back to Home</a>
+          <a href="report.html" class="btn btn-info">View Report</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/game.js"></script>
+    <script src="js/levels/library.js"></script>
+    <script src="js/data-collection.js"></script>
+    <script src="js/library-page.js"></script>
+  </body>
+</html>

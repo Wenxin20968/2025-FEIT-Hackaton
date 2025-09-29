@@ -1,178 +1,239 @@
-# 🌍 小小探险家 (Little Explorer Adventure)
+# 🌍 Little Explorer Adventure
 
-一个专为 ADHD 评估设计的互动游戏，通过四个有趣的关卡来评估儿童的注意力、组织能力、冲动控制和执行功能。
+An interactive game designed for ADHD assessment, featuring four engaging levels to evaluate children's attention, organization, impulse control, and executive function.
 
-## 🎮 游戏特色
+## 🎮 Game Features
 
-### 🏞️ 四个精彩关卡
+### 🏞️ Four Exciting Levels
 
-1. **🌲 魔法森林** - 注意力测试
+1. **🌲 Magic Forest** - Attention Test
 
-   - 跟随导师指引穿越森林
-   - 抵抗蝴蝶和小动物的干扰
-   - 评估专注力和抗干扰能力
+   - Follow the guide through the forest
+   - Resist distractions from butterflies and small animals
+   - Evaluate focus and distraction resistance
 
-2. **📚 古老书院** - 组织能力测试
+2. **📚 Ancient Library** - Organization Test
 
-   - 整理书包，收集学习用品
-   - 避免被玩具和零食分散注意力
-   - 评估任务完成和组织能力
+   - Organize backpack and collect school supplies
+   - Avoid being distracted by toys and snacks
+   - Evaluate task completion and organization skills
 
-3. **🌉 耐心之河** - 冲动控制测试
+3. **🌉 Patience River** - Impulse Control Test
 
-   - 等待红绿灯，安全过桥
-   - 学习控制冲动，培养耐心
-   - 评估冲动控制和多动表现
+   - Wait for traffic lights and cross the bridge safely
+   - Learn to control impulses and develop patience
+   - Evaluate impulse control and hyperactivity
 
-4. **🏰 智慧之塔** - 执行功能测试
-   - 记忆数字序列，按顺序点亮塔层
-   - 训练记忆力和执行功能
-   - 评估记忆准确性和注意力持续性
+4. **🏰 Wisdom Tower** - Executive Function Test
+   - Remember number sequences and light up tower levels in order
+   - Train memory and executive function
+   - Evaluate memory accuracy and sustained attention
 
-### 📊 专业评估系统
+### 📊 Professional Assessment System
 
-- **实时数据收集**：记录游戏过程中的各项指标
-- **ADHD-RS-IV 映射**：基于标准量表进行评估
-- **多维度分析**：注意力、多动、冲动、执行功能
-- **风险评估**：低/中/高风险等级划分
-- **专业建议**：基于评估结果提供针对性建议
+- **Real-time Data Collection**: Records various metrics during gameplay
+- **ADHD-RS-IV Mapping**: Assessment based on standard scales
+- **Multi-dimensional Analysis**: Attention, hyperactivity, impulsivity, executive function
+- **Risk Assessment**: Low/Medium/High risk level classification
+- **Professional Recommendations**: Targeted suggestions based on assessment results
 
-### ⭐ 激励机制
+### ⭐ Motivation System
 
-- **星星系统**：每关最高 5 星评价
-- **徽章奖励**：完成关卡获得探险徽章
-- **成就称号**：完成全部关卡获得"小小专注力勇士"称号
-- **进度追踪**：实时显示游戏进度和成就
+- **Star System**: Up to 5 stars per level
+- **Badge Rewards**: Earn adventure badges for completing levels
+- **Achievement Titles**: Complete all levels to earn "Little Focus Warrior" title
+- **Progress Tracking**: Real-time display of game progress and achievements
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 运行游戏
+### Running the Game
 
-1. 直接在浏览器中打开 `index.html`
-2. 或者使用本地服务器：
+**Pure Frontend - No Server Required!**
 
-   ```bash
-   # 使用Python
-   python -m http.server 8000
+Simply open `index.html` directly in your browser:
 
-   # 使用Node.js
-   npx serve .
-   ```
+1. **Direct File Access** (Recommended):
 
-### 游戏控制
+   - Double-click `index.html` to open in your default browser
+   - Or right-click → "Open with" → Choose your browser
+   - All functionality works without any server setup
 
-- **鼠标点击**：与游戏元素交互
-- **空格键**：暂停/继续游戏
-- **ESC 键**：返回主菜单
-- **数字键 1-4**：快速选择关卡
+2. **Alternative Access Methods**:
+   - Drag `index.html` into your browser window
+   - Use File → Open in any browser
+   - Works on any device with a modern browser
 
-## 🎯 评估指标说明
+### Game Pages
 
-### 注意力测试 (魔法森林)
+- **Main page**: `index.html`
+- **Forest level**: `forest.html`
+- **Library level**: `library.html`
+- **River level**: `river.html`
+- **Tower level**: `tower.html`
+- **Report page**: `report.html`
 
-- 错误路径次数
-- 分心点击次数
-- 反应时间
-- 专注时间
+### Game Controls
 
-### 组织能力测试 (古老书院)
+- **Mouse Click**: Interact with game elements
+- **Spacebar**: Pause/Resume game
+- **ESC Key**: Return to main menu
+- **Number Keys 1-4**: Quick level selection
 
-- 遗漏物品数量
-- 拖拽顺序合理性
-- 任务放弃次数
-- 完成时间
+## 🎯 Assessment Metrics
 
-### 冲动控制测试 (耐心之河)
+### Attention Test (Magic Forest)
 
-- 过早点击次数
-- 点击频率
-- 成功率
-- 等待时间
+- Wrong path count
+- Distraction click count
+- Reaction time
+- Focus time
 
-### 执行功能测试 (智慧之塔)
+### Organization Test (Ancient Library)
 
-- 正确率
-- 分心事件
-- 完成时间
-- 记忆准确性
+- Missed items count
+- Drag sequence rationality
+- Task abandonment count
+- Completion time
 
-## 📈 报告解读
+### Impulse Control Test (Patience River)
 
-### 风险等级
+- Premature click count
+- Click frequency
+- Success rate
+- Waiting time
 
-- **低风险**：表现良好，各项能力发展正常
-- **中等风险**：部分能力需要关注，建议针对性训练
-- **高风险**：建议寻求专业指导，进行系统性训练
+### Executive Function Test (Wisdom Tower)
 
-### 专业建议
+- Accuracy rate
+- Distraction events
+- Completion time
+- Memory accuracy
 
-基于游戏表现，系统会提供个性化的训练建议：
+## 📈 Report Interpretation
 
-- 注意力训练：专注力练习、冥想
-- 组织能力训练：任务规划、物品整理
-- 冲动控制训练：耐心练习、深呼吸
-- 执行功能训练：记忆游戏、逻辑思维
+### Risk Levels
 
-## 🛠️ 技术特性
+- **Low Risk**: Good performance, all abilities developing normally
+- **Medium Risk**: Some abilities need attention, recommended targeted training
+- **High Risk**: Recommended to seek professional guidance for systematic training
 
-- **纯前端实现**：HTML5 Canvas + JavaScript
-- **响应式设计**：适配不同屏幕尺寸
-- **数据持久化**：本地存储游戏进度和统计
-- **无障碍设计**：支持键盘操作
-- **模块化架构**：易于扩展和维护
+### Professional Recommendations
 
-## 📁 项目结构
+Based on game performance, the system provides personalized training suggestions:
+
+- Attention Training: Focus exercises, meditation
+- Organization Training: Task planning, item organization
+- Impulse Control Training: Patience exercises, deep breathing
+- Executive Function Training: Memory games, logical thinking
+
+## 🛠️ Technical Features
+
+- **Pure Frontend Implementation**: HTML5 Canvas + JavaScript
+- **Responsive Design**: Adapts to different screen sizes
+- **Data Persistence**: Local storage for game progress and statistics
+- **Accessibility Design**: Supports keyboard operations
+- **Modular Architecture**: Easy to extend and maintain
+
+## 📁 Project Structure
 
 ```
 2025-FEIT-Hackaton/
-├── index.html              # 主页面
-├── styles.css              # 样式文件
-├── js/
-│   ├── game.js             # 游戏核心类
-│   ├── data-collection.js  # 数据收集系统
-│   ├── report-generator.js # 报告生成器
-│   ├── main.js            # 主入口文件
-│   └── levels/            # 关卡实现
-│       ├── forest.js      # 魔法森林
-│       ├── library.js     # 古老书院
-│       ├── river.js       # 耐心之河
-│       └── tower.js       # 智慧之塔
-└── README.md              # 说明文档
+├── index.html              # Main page
+├── forest.html             # Magic Forest level
+├── library.html            # Ancient Library level
+├── river.html              # Patience River level
+├── tower.html              # Wisdom Tower level
+├── report.html             # Assessment report
+├── styles.css              # Style file
+├── js/                     # JavaScript files
+│   ├── game.js             # Game core class
+│   ├── data-collection.js  # Data collection system
+│   ├── report-generator.js # Report generator
+│   ├── main.js            # Main entry file
+│   ├── ui-components.js   # UI components
+│   ├── level-page.js      # Level page handler
+│   ├── forest-page.js     # Forest page handler
+│   ├── library-page.js    # Library page handler
+│   ├── river-page.js      # River page handler
+│   ├── tower-page.js      # Tower page handler
+│   ├── report-page.js     # Report page handler
+│   └── levels/            # Level implementations
+│       ├── forest.js      # Magic Forest
+│       ├── library.js     # Ancient Library
+│       ├── river.js       # Patience River
+│       └── tower.js       # Wisdom Tower
+└── README.md              # Documentation
 ```
 
-## 🎨 设计理念
+## 🎨 Design Philosophy
 
-### 游戏化学习
+### Gamified Learning
 
-- 将严肃的评估过程包装成有趣的冒险
-- 通过故事背景增强参与感
-- 即时反馈和奖励机制
+- Wrap serious assessment process in fun adventure
+- Enhance engagement through story background
+- Immediate feedback and reward mechanisms
 
-### 科学评估
+### Scientific Assessment
 
-- 基于 ADHD-RS-IV 标准量表
-- 多维度数据收集
-- 客观的量化指标
+- Based on ADHD-RS-IV standard scales
+- Multi-dimensional data collection
+- Objective quantitative indicators
 
-### 用户友好
+### User-Friendly
 
-- 直观的操作界面
-- 清晰的视觉反馈
-- 详细的结果报告
+- Intuitive operation interface
+- Clear visual feedback
+- Detailed result reports
 
-## 🔬 科学依据
+## 🔬 Scientific Foundation
 
-本游戏基于以下科学理论设计：
+This game is designed based on the following scientific theories:
 
-- **注意力理论**：选择性注意、持续性注意
-- **执行功能理论**：工作记忆、抑制控制、认知灵活性
-- **行为评估理论**：标准化评估工具的应用
-- **游戏化学习理论**：动机、参与度、学习效果
+- **Attention Theory**: Selective attention, sustained attention
+- **Executive Function Theory**: Working memory, inhibitory control, cognitive flexibility
+- **Behavioral Assessment Theory**: Application of standardized assessment tools
+- **Gamified Learning Theory**: Motivation, engagement, learning effectiveness
 
-## 📞 技术支持
+## 🎯 Key Features
 
-如有问题或建议，请联系开发团队。
+### Native Architecture Optimization
+
+- **Pure Frontend**: No framework dependencies
+- **Modular Design**: Reusable components and utilities
+- **Performance Optimized**: Efficient rendering and data handling
+- **Cross-platform**: Works on all modern browsers
+
+### Assessment Accuracy
+
+- **Standardized Metrics**: Based on clinical assessment tools
+- **Real-time Analysis**: Continuous data collection and analysis
+- **Professional Reports**: Detailed assessment results and recommendations
+- **Risk Stratification**: Clear risk level identification
+
+### User Experience
+
+- **Intuitive Interface**: Easy to understand and navigate
+- **Engaging Gameplay**: Fun and educational game mechanics
+- **Progress Tracking**: Visual progress indicators and achievements
+- **Accessibility**: Keyboard navigation and screen reader support
+
+## 📞 Technical Support
+
+For questions, suggestions, or technical issues:
+
+- **GitHub Issues**: Create an issue in the repository
+- **Development Team**: Contact RoastDuck team
+- **Documentation**: Refer to this README for setup and usage instructions
+
+## ⚠️ Important Notice
+
+**Note**: This game is for preliminary assessment only and cannot replace professional medical diagnosis. For professional diagnosis, please consult relevant medical professionals.
+
+## 🏆 Acknowledgments
+
+This project is developed for the 2025 FEIT Hackathon, focusing on innovative solutions for ADHD assessment and intervention through gamified learning approaches.
 
 ---
 
-**注意**：此游戏仅用于初步评估，不能替代专业医疗诊断。如需专业诊断，请咨询相关医疗专业人士。
+**Version**: 2.1.0  
+**Last Updated**: 30/09/2025

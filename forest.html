@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Magic Forest - Attention Test</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="game-container" class="game-layout">
+      <div class="game-header">
+        <h1>🌲 Magic Forest - Attention Test</h1>
+        <div class="game-stats">
+          <div class="game-stat">
+            <span class="game-stat-label">Stars:</span>
+            <span id="stars-count">0</span>
+          </div>
+          <div class="game-stat">
+            <span class="game-stat-label">Errors:</span>
+            <span id="errors-count">0</span>
+          </div>
+        </div>
+        <div class="game-actions">
+          <a href="index.html" class="btn btn-back">🏠 Back to Home</a>
+          <button id="pause-game" class="btn btn-pause">⏸️ Pause</button>
+        </div>
+      </div>
+
+      <div class="game-screen">
+        <canvas
+          id="game-canvas"
+          width="800"
+          height="600"
+          class="game-canvas"
+        ></canvas>
+      </div>
+
+      <div class="game-instructions">
+        <h3>🎯 Game Instructions</h3>
+        <p>Follow the golden path and click on the correct target points!</p>
+        <p>
+          ⚠️ Attention: Don't be distracted by butterflies and small animals!
+        </p>
+        <div class="progress-info">
+          <p>Progress: <span id="progress-text">0/6</span></p>
+          <p>Error Count: <span id="error-count">0</span></p>
+        </div>
+      </div>
+
+      <div id="results-screen" style="display: none" class="results-screen">
+        <h2>🎉 Level Complete!</h2>
+        <div id="level-results" class="level-results"></div>
+        <div class="result-actions">
+          <a href="library.html" class="btn btn-primary"
+            >Next Level: Ancient Library</a
+          >
+          <a href="index.html" class="btn btn-secondary">Back to Home</a>
+          <a href="report.html" class="btn btn-info">View Report</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/game.js"></script>
+    <script src="js/levels/forest.js"></script>
+    <script src="js/data-collection.js"></script>
+    <script src="js/ui-components.js"></script>
+    <script src="js/level-page.js"></script>
+    <script src="js/forest-page.js"></script>
+  </body>
+</html>

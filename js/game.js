@@ -1,4 +1,4 @@
-// 游戏核心类
+// Game core class
 class Game {
     constructor() {
         this.canvas = document.getElementById('game-canvas');
@@ -22,13 +22,14 @@ class Game {
     }
     
     init() {
+        console.log('Game init called');
         this.setupEventListeners();
         this.updateUI();
-        this.showMainMenu();
+        console.log('Game initialized successfully');
     }
     
     setupEventListeners() {
-        // 关卡按钮事件
+        // Level button events
         document.querySelectorAll('.level-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const level = e.target.dataset.level;
@@ -36,39 +37,65 @@ class Game {
             });
         });
         
-        // 游戏控制按钮
-        document.getElementById('start-level').addEventListener('click', () => {
-            this.resumeGame();
-        });
+        // Game control buttons - check if elements exist
+        const startLevelBtn = document.getElementById('start-level');
+        if (startLevelBtn) {
+            startLevelBtn.addEventListener('click', () => {
+                this.resumeGame();
+            });
+        }
         
-        document.getElementById('pause-game').addEventListener('click', () => {
-            this.pauseGame();
-        });
+        const pauseGameBtn = document.getElementById('pause-game');
+        if (pauseGameBtn) {
+            pauseGameBtn.addEventListener('click', () => {
+                this.pauseGame();
+            });
+        }
         
-        document.getElementById('back-to-menu').addEventListener('click', () => {
-            this.showMainMenu();
-        });
+        const backToMenuBtn = document.getElementById('back-to-menu');
+        if (backToMenuBtn) {
+            backToMenuBtn.addEventListener('click', () => {
+                this.showMainMenu();
+            });
+        }
         
-        document.getElementById('next-level').addEventListener('click', () => {
-            this.showMainMenu();
-        });
+        const nextLevelBtn = document.getElementById('next-level');
+        if (nextLevelBtn) {
+            nextLevelBtn.addEventListener('click', () => {
+                this.showMainMenu();
+            });
+        }
         
-        document.getElementById('view-report').addEventListener('click', () => {
-            this.showFinalReport();
-        });
+        const viewReportBtn = document.getElementById('view-report');
+        if (viewReportBtn) {
+            viewReportBtn.addEventListener('click', () => {
+                this.showFinalReport();
+            });
+        }
         
-        document.getElementById('restart-game').addEventListener('click', () => {
-            this.restartGame();
-        });
+        const restartGameBtn = document.getElementById('restart-game');
+        if (restartGameBtn) {
+            restartGameBtn.addEventListener('click', () => {
+                this.restartGame();
+            });
+        }
     }
     
     startLevel(levelName) {
+        console.log('Starting level:', levelName);
         this.hideAllScreens();
-        document.getElementById('game-controls').style.display = 'block';
         
-        // 根据关卡名称创建对应的关卡实例
+        // Show game canvas
+        const gameScreen = document.getElementById('game-screen');
+        if (gameScreen) {
+            gameScreen.style.display = 'block';
+            console.log('Game screen displayed');
+        }
+        
+        // Create corresponding level instance based on level name
         switch(levelName) {
             case 'forest':
+                console.log('Creating ForestLevel...');
                 this.currentLevel = new ForestLevel(this);
                 break;
             case 'library':
@@ -83,9 +110,13 @@ class Game {
         }
         
         if (this.currentLevel) {
+            console.log('Level created, initializing...');
             this.currentLevel.init();
             this.isPlaying = true;
+            console.log('Starting game loop...');
             this.gameLoop();
+        } else {
+            console.error('Failed to create level:', levelName);
         }
     }
     
@@ -105,7 +136,7 @@ class Game {
     }
     
     render() {
-        // 清空画布
+        // Clear canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         if (this.currentLevel) {
@@ -115,12 +146,12 @@ class Game {
     
     pauseGame() {
         this.isPaused = true;
-        document.getElementById('pause-game').textContent = '继续';
+        document.getElementById('pause-game').textContent = 'Resume';
     }
     
     resumeGame() {
         this.isPaused = false;
-        document.getElementById('pause-game').textContent = '暂停';
+        document.getElementById('pause-game').textContent = 'Pause';
         this.gameLoop();
     }
     
@@ -129,7 +160,7 @@ class Game {
         this.gameData[levelName].score = score;
         this.gameData[levelName].data = data;
         
-        // 更新玩家统计
+        // Update player stats
         this.playerStats.stars += score;
         if (score >= 3) {
             this.playerStats.badges++;
@@ -146,12 +177,12 @@ class Game {
         
         const resultsDiv = document.getElementById('level-results');
         resultsDiv.innerHTML = `
-            <h3>🎉 关卡完成！</h3>
-            <p>获得 ${score} 颗星星 ⭐</p>
+            <h3>🎉 Level Complete!</h3>
+            <p>Earned ${score} stars ⭐</p>
             <div class="stars-display">
                 ${'⭐'.repeat(score)}
             </div>
-            ${score >= 3 ? '<p>🏆 获得新徽章！</p>' : ''}
+            ${score >= 3 ? '<p>🏆 New Badge Earned!</p>' : ''}
         `;
     }
     
@@ -161,7 +192,7 @@ class Game {
         this.isPlaying = false;
         this.currentLevel = null;
         
-        // 更新关卡按钮状态
+        // Update level button status
         document.querySelectorAll('.level-btn').forEach(btn => {
             const level = btn.dataset.level;
             if (this.gameData[level].completed) {
@@ -186,15 +217,25 @@ class Game {
     }
     
     hideAllScreens() {
-        document.getElementById('game-ui').style.display = 'none';
-        document.getElementById('game-controls').style.display = 'none';
-        document.getElementById('results-screen').style.display = 'none';
-        document.getElementById('final-report').style.display = 'none';
+        const gameUI = document.getElementById('game-ui');
+        if (gameUI) gameUI.style.display = 'none';
+        
+        const gameControls = document.getElementById('game-controls');
+        if (gameControls) gameControls.style.display = 'none';
+        
+        const resultsScreen = document.getElementById('results-screen');
+        if (resultsScreen) resultsScreen.style.display = 'none';
+        
+        const finalReport = document.getElementById('final-report');
+        if (finalReport) finalReport.style.display = 'none';
     }
     
     updateUI() {
-        document.getElementById('stars-count').textContent = this.playerStats.stars;
-        document.getElementById('badges-count').textContent = this.playerStats.badges;
+        const starsCount = document.getElementById('stars-count');
+        if (starsCount) starsCount.textContent = this.playerStats.stars;
+        
+        const badgesCount = document.getElementById('badges-count');
+        if (badgesCount) badgesCount.textContent = this.playerStats.badges;
     }
     
     restartGame() {
@@ -210,7 +251,7 @@ class Game {
     }
 }
 
-// 基础关卡类
+// Base level class
 class BaseLevel {
     constructor(game) {
         this.game = game;
@@ -222,15 +263,15 @@ class BaseLevel {
     }
     
     init() {
-        // 子类实现
+        // To be implemented by subclasses
     }
     
     update() {
-        // 子类实现
+        // To be implemented by subclasses
     }
     
     render(ctx) {
-        // 子类实现
+        // To be implemented by subclasses
     }
     
     complete(score, data) {

@@ -1,14 +1,17 @@
-// 主入口文件
+// Main entry file
 document.addEventListener('DOMContentLoaded', function() {
-    // 初始化游戏
-    window.game = new Game();
-    
-    // 添加一些额外的样式和功能
+    // Add some extra styles and features
     addCustomStyles();
     setupKeyboardControls();
+    
+    // Only initialize game on main page
+    if (document.getElementById('main-menu')) {
+        // Main page does not need to initialize game
+        console.log('Main page loaded');
+    }
 });
 
-// 添加自定义样式
+// Add custom styles
 function addCustomStyles() {
     const style = document.createElement('style');
     style.textContent = `
@@ -96,10 +99,10 @@ function addCustomStyles() {
     document.head.appendChild(style);
 }
 
-// 设置键盘控制
+// Setup keyboard controls
 function setupKeyboardControls() {
     document.addEventListener('keydown', function(e) {
-    // 空格键暂停/继续游戏
+    // Space key pause/resume game
     if (e.code === 'Space' && window.game && window.game.isPlaying) {
         e.preventDefault();
         if (window.game.isPaused) {
@@ -109,12 +112,12 @@ function setupKeyboardControls() {
         }
     }
     
-    // ESC键返回主菜单
+    // ESC key return to main menu
     if (e.code === 'Escape' && window.game) {
         window.game.showMainMenu();
     }
     
-    // 数字键快速选择关卡
+    // Number keys quick level selection
     if (e.code >= 'Digit1' && e.code <= 'Digit4' && window.game && !window.game.isPlaying) {
         const levelMap = {
             'Digit1': 'forest',
@@ -130,7 +133,7 @@ function setupKeyboardControls() {
 });
 }
 
-// 添加游戏音效（可选）
+// Add game sound effects (optional)
 class SoundManager {
     constructor() {
         this.sounds = {};
@@ -159,10 +162,10 @@ class SoundManager {
     }
 }
 
-// 创建全局音效管理器
+// Create global sound manager
 window.soundManager = new SoundManager();
 
-// 添加游戏统计
+// Add game statistics
 class GameStats {
     constructor() {
         this.stats = {
@@ -203,33 +206,33 @@ class GameStats {
     }
 }
 
-// 创建全局统计管理器
+// Create global statistics manager
 window.gameStats = new GameStats();
 
-// 添加帮助提示
+// Add help tips
 function showHelp() {
     const helpText = `
-    🎮 游戏控制说明：
+    🎮 Game Controls:
     
-    🖱️ 鼠标点击 - 与游戏元素交互
-    ⌨️ 空格键 - 暂停/继续游戏
-    ⌨️ ESC键 - 返回主菜单
-    ⌨️ 数字键1-4 - 快速选择关卡
+    🖱️ Mouse Click - Interact with game elements
+    ⌨️ Spacebar - Pause/Resume game
+    ⌨️ ESC Key - Return to main menu
+    ⌨️ Number Keys 1-4 - Quickly select levels
     
-    🎯 游戏目标：
-    完成四个关卡的挑战，获得星星和徽章！
+    🎯 Game Objective:
+    Complete challenges in four levels, earn stars and badges!
     
-    📊 评估说明：
-    游戏会自动评估注意力、组织能力、冲动控制和执行功能。
+    📊 Assessment Description:
+    The game automatically assesses attention, organization, impulse control, and executive function.
     `;
     
     alert(helpText);
 }
 
-// 添加帮助按钮
+// Add help button
 document.addEventListener('DOMContentLoaded', function() {
     const helpButton = document.createElement('button');
-    helpButton.textContent = '❓ 帮助';
+    helpButton.textContent = '❓ Help';
     helpButton.style.position = 'fixed';
     helpButton.style.top = '10px';
     helpButton.style.right = '10px';

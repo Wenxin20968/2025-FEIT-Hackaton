@@ -231,7 +231,7 @@ body {
     color: #C62828;
 }
 
-/* 游戏内元素样式 */
+/* In-game element styles */
 .game-object {
     position: absolute;
     transition: all 0.3s ease;
@@ -271,9 +271,414 @@ body {
     background: #8BC34A;
 }
 
-/* 响应式设计 */
+/* Main page styles */
+#main-menu {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px;
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    border-radius: 20px;
+    color: white;
+}
+
+.header h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.subtitle {
+    font-size: 1.2em;
+    opacity: 0.9;
+}
+
+.game-description {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 15px;
+}
+
+.game-description h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.level-selection h3 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.level-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.level-card {
+    display: block;
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.level-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border-color: #4CAF50;
+}
+
+.level-icon {
+    font-size: 3em;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.level-card h4 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+    text-align: center;
+}
+
+.level-card p {
+    text-align: center;
+    color: #666;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.level-description {
+    font-size: 0.9em;
+    color: #777;
+    line-height: 1.5;
+}
+
+.menu-actions {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: #2196F3;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #1976D2;
+    transform: translateY(-2px);
+}
+
+.btn-info {
+    background: #FF9800;
+    color: white;
+}
+
+.btn-info:hover {
+    background: #F57C00;
+    transform: translateY(-2px);
+}
+
+.btn-back {
+    background: #666;
+    color: white;
+}
+
+.btn-back:hover {
+    background: #555;
+    transform: translateY(-2px);
+}
+
+.btn-pause {
+    background: #FF5722;
+    color: white;
+}
+
+.btn-pause:hover {
+    background: #E64A19;
+    transform: translateY(-2px);
+}
+
+.btn-help {
+    background: #9C27B0;
+    color: white;
+}
+
+.btn-help:hover {
+    background: #7B1FA2;
+    transform: translateY(-2px);
+}
+
+.btn-print {
+    background: #607D8B;
+    color: white;
+}
+
+.btn-print:hover {
+    background: #455A64;
+    transform: translateY(-2px);
+}
+
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    color: #666;
+}
+
+/* Game page styles */
+#game-instructions {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+#game-instructions h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+#game-instructions p {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+#progress-info {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+}
+
+#progress-info p {
+    margin: 0;
+    font-weight: bold;
+    color: #333;
+}
+
+.result-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.result-actions .btn {
+    margin: 5px 10px;
+}
+
+/* Report page styles */
+#report-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.report-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 30px;
+    background: linear-gradient(45deg, #2196F3, #1976D2);
+    border-radius: 20px;
+    color: white;
+}
+
+.report-header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.header-actions {
+    margin-top: 20px;
+}
+
+.loading-message {
+    text-align: center;
+    padding: 40px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.report-actions {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.report-footer {
+    margin-top: 40px;
+    padding: 20px;
+    background: #fff3e0;
+    border-radius: 10px;
+    border-left: 4px solid #FF9800;
+}
+
+.disclaimer h4 {
+    color: #F57C00;
+    margin-bottom: 10px;
+}
+
+.disclaimer p {
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Universal game component styles */
+.game-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    border-radius: 15px;
+    color: white;
+}
+
+.game-header h1 {
+    font-size: 2em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.game-stats {
+    display: flex;
+    gap: 20px;
+}
+
+.game-stat {
+    background: rgba(255,255,255,0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.game-stat-label {
+    margin-right: 5px;
+}
+
+.game-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.game-screen {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.game-canvas {
+    border: 3px solid #4CAF50;
+    border-radius: 15px;
+    background: #f0f8ff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.game-instructions {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.game-instructions h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.game-instructions p {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+}
+
+.progress-info p {
+    margin: 0;
+    font-weight: bold;
+    color: #333;
+}
+
+.results-screen {
+    text-align: center;
+    padding: 30px;
+    background: #f9f9f9;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+.level-results {
+    margin: 20px 0;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.result-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.result-actions .btn {
+    margin: 5px 10px;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
-    #game-container {
+    #game-container, #main-menu, #report-container {
         margin: 10px;
         padding: 15px;
     }
@@ -283,13 +688,22 @@ body {
         height: auto;
     }
     
-    #level-buttons {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    .level-grid {
+        grid-template-columns: 1fr;
     }
     
-    .level-btn {
-        padding: 15px;
-        font-size: 1em;
+    .level-card {
+        padding: 20px;
+    }
+    
+    .header h1 {
+        font-size: 2em;
+    }
+    
+    .btn {
+        display: block;
+        margin: 10px auto;
+        width: 200px;
     }
 }
 

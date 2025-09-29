@@ -1,4 +1,4 @@
-// 报告生成器类
+// Report Generator Class
 class ReportGenerator {
     constructor(gameData) {
         this.gameData = gameData;
@@ -7,20 +7,20 @@ class ReportGenerator {
     }
     
     calculateAllAssessments() {
-        // 为每个关卡计算评估数据
+        // Calculate assessment data for each level
         Object.keys(this.gameData).forEach(level => {
             if (this.gameData[level].completed) {
                 const dataCollector = new DataCollector();
-                // 模拟数据收集（实际应用中会从真实数据中获取）
+                // Simulate data collection (in real application would be retrieved from actual data)
                 this.assessments[level] = this.simulateAssessment(level);
             }
         });
     }
     
     simulateAssessment(level) {
-        // 基于关卡完成情况模拟评估数据
+        // Simulate assessment data based on level completion
         const baseScore = this.gameData[level].score;
-        const randomFactor = Math.random() * 0.3 - 0.15; // -15% 到 +15% 的随机变化
+        const randomFactor = Math.random() * 0.3 - 0.15; // -15% to +15% random variation
         
         switch(level) {
             case 'forest':
@@ -58,23 +58,23 @@ class ReportGenerator {
         );
         
         if (completedLevels.length === 0) {
-            return '<p>请先完成至少一个关卡来生成报告。</p>';
+            return '<p>Please complete at least one level to generate a report.</p>';
         }
         
         let html = '<div class="report-header">';
-        html += '<h2>📊 小小探险家评估报告</h2>';
-        html += '<p>基于游戏表现的专业评估</p>';
+        html += '<h2>📊 Little Explorer Assessment Report</h2>';
+        html += '<p>Professional Assessment Based on Game Performance</p>';
         html += '</div>';
         
-        // 总体评估
+        // Overall assessment
         html += this.generateOverallAssessment();
         
-        // 各关卡详细评估
+        // Detailed assessment for each level
         completedLevels.forEach(level => {
             html += this.generateLevelAssessment(level);
         });
         
-        // 建议和推荐
+        // Suggestions and recommendations
         html += this.generateRecommendations();
         
         return html;
@@ -92,37 +92,37 @@ class ReportGenerator {
         
         let riskLevel = 'low';
         let riskClass = 'risk-low';
-        let riskText = '低风险';
+        let riskText = 'Low Risk';
         
         if (averageScore < 2) {
             riskLevel = 'high';
             riskClass = 'risk-high';
-            riskText = '高风险';
+            riskText = 'High Risk';
         } else if (averageScore < 3) {
             riskLevel = 'medium';
             riskClass = 'risk-medium';
-            riskText = '中等风险';
+            riskText = 'Medium Risk';
         }
         
         return `
             <div class="report-section overall-assessment">
-                <h3>🎯 总体评估</h3>
+                <h3>🎯 Overall Assessment</h3>
                 <div class="overall-stats">
                     <div class="stat-item">
-                        <span class="stat-label">完成关卡:</span>
+                        <span class="stat-label">Completed Levels:</span>
                         <span class="stat-value">${completedCount}/4</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">总星星数:</span>
+                        <span class="stat-label">Total Stars:</span>
                         <span class="stat-value">${totalStars}</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">平均表现:</span>
+                        <span class="stat-label">Average Performance:</span>
                         <span class="stat-value">${averageScore.toFixed(1)}/5</span>
                     </div>
                 </div>
                 <div class="risk-assessment">
-                    <h4>风险等级评估</h4>
+                    <h4>Risk Level Assessment</h4>
                     <div class="risk-level ${riskClass}">${riskText}</div>
                     <p class="risk-description">${this.getRiskDescription(riskLevel)}</p>
                 </div>
@@ -135,23 +135,23 @@ class ReportGenerator {
         const assessment = this.assessments[level];
         
         const levelNames = {
-            forest: '🌲 魔法森林 - 注意力测试',
-            library: '📚 古老书院 - 组织能力测试',
-            river: '🌉 耐心之河 - 冲动控制测试',
-            tower: '🏰 智慧之塔 - 执行功能测试'
+            forest: '🌲 Magic Forest - Attention Test',
+            library: '📚 Ancient Library - Organization Test',
+            river: '🌉 Patience River - Impulse Control Test',
+            tower: '🏰 Wisdom Tower - Executive Function Test'
         };
         
         let html = `
             <div class="report-section level-assessment">
                 <h3>${levelNames[level]}</h3>
                 <div class="level-score">
-                    <span class="score-label">关卡得分:</span>
-                    <span class="score-value">${levelData.score}/5 星星</span>
+                    <span class="score-label">Level Score:</span>
+                    <span class="score-value">${levelData.score}/5 Stars</span>
                     <div class="stars-display">${'⭐'.repeat(levelData.score)}${'☆'.repeat(5 - levelData.score)}</div>
                 </div>
         `;
         
-        // 添加具体评估指标
+        // Add specific assessment metrics
         Object.keys(assessment).forEach(metric => {
             const score = assessment[metric];
             const percentage = (score / 18) * 100;
@@ -179,7 +179,7 @@ class ReportGenerator {
         
         let recommendations = [];
         
-        // 基于各关卡表现生成建议
+        // Generate suggestions based on level performance
         completedLevels.forEach(level => {
             const score = this.gameData[level].score;
             const assessment = this.assessments[level];
@@ -187,28 +187,28 @@ class ReportGenerator {
             if (score < 3) {
                 switch(level) {
                     case 'forest':
-                        recommendations.push("注意力训练：建议进行专注力练习，如冥想或专注力游戏");
+                        recommendations.push("Attention Training: Recommended to practice focus exercises, such as meditation or focus games");
                         break;
                     case 'library':
-                        recommendations.push("组织能力训练：建议学习任务规划和物品整理技巧");
+                        recommendations.push("Organization Training: Recommended to learn task planning and item organization skills");
                         break;
                     case 'river':
-                        recommendations.push("冲动控制训练：建议进行耐心练习和冲动控制技巧");
+                        recommendations.push("Impulse Control Training: Recommended to practice patience exercises and impulse control techniques");
                         break;
                     case 'tower':
-                        recommendations.push("执行功能训练：建议进行记忆和逻辑思维训练");
+                        recommendations.push("Executive Function Training: Recommended to practice memory and logical thinking training");
                         break;
                 }
             }
         });
         
         if (recommendations.length === 0) {
-            recommendations.push("表现优秀！继续保持良好的学习习惯。");
+            recommendations.push("Excellent performance! Keep up the good study habits.");
         }
         
         let html = `
             <div class="report-section recommendations">
-                <h3>💡 专业建议</h3>
+                <h3>💡 Professional Advice</h3>
                 <ul class="recommendations-list">
         `;
         
@@ -219,7 +219,7 @@ class ReportGenerator {
         html += `
                 </ul>
                 <div class="note">
-                    <p><strong>注意：</strong>此评估仅供参考，如需专业诊断请咨询相关医疗专业人士。</p>
+                    <p><strong>Note:</strong> This assessment is for reference only. For professional diagnosis, please consult relevant medical professionals.</p>
                 </div>
             </div>
         `;
@@ -229,25 +229,25 @@ class ReportGenerator {
     
     getMetricLabel(metric) {
         const labels = {
-            attention: '注意力',
-            focus: '专注力',
-            distractions: '抗干扰能力',
-            organization: '组织能力',
-            taskCompletion: '任务完成度',
-            impulseControl: '冲动控制',
-            hyperactivity: '多动表现',
-            patience: '耐心程度',
-            executiveFunction: '执行功能',
-            memory: '记忆力'
+            attention: 'Attention',
+            focus: 'Focus',
+            distractions: 'Distraction Resistance',
+            organization: 'Organization',
+            taskCompletion: 'Task Completion',
+            impulseControl: 'Impulse Control',
+            hyperactivity: 'Hyperactivity',
+            patience: 'Patience',
+            executiveFunction: 'Executive Function',
+            memory: 'Memory'
         };
         return labels[metric] || metric;
     }
     
     getRiskDescription(riskLevel) {
         const descriptions = {
-            low: '表现良好，各项能力发展正常。继续保持！',
-            medium: '部分能力需要关注，建议进行针对性训练。',
-            high: '建议寻求专业指导，进行系统性的能力训练。'
+            low: 'Good performance, all abilities are developing normally. Keep it up!',
+            medium: 'Some abilities need attention, recommended to conduct targeted training.',
+            high: 'Recommended to seek professional guidance for systematic ability training.'
         };
         return descriptions[riskLevel];
     }

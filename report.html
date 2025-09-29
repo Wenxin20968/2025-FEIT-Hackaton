@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Adventure Report - ADHD Assessment Results</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="report-container">
+      <div class="report-header">
+        <h1>📊 Little Explorer Assessment Report</h1>
+        <p class="subtitle">
+          Professional ADHD Assessment Based on Game Performance
+        </p>
+        <div class="header-actions">
+          <a href="index.html" class="btn btn-back">🏠 Back to Home</a>
+          <button onclick="printReport()" class="btn btn-print">
+            🖨️ Print Report
+          </button>
+        </div>
+      </div>
+
+      <div id="report-content">
+        <div class="loading-message">
+          <h3>Generating Report...</h3>
+          <p>Please wait, the system is analyzing your game data</p>
+        </div>
+      </div>
+
+      <div class="report-actions">
+        <a href="index.html" class="btn btn-primary">Restart Game</a>
+        <button onclick="downloadReport()" class="btn btn-secondary">
+          📥 Download Report
+        </button>
+      </div>
+
+      <div class="report-footer">
+        <div class="disclaimer">
+          <h4>⚠️ Important Notice</h4>
+          <p>
+            This assessment report is for reference only and cannot replace
+            professional medical diagnosis. For professional diagnosis, please
+            consult relevant medical professionals.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/data-collection.js"></script>
+    <script src="js/report-generator.js"></script>
+    <script src="js/report-page.js"></script>
+  </body>
+</html>

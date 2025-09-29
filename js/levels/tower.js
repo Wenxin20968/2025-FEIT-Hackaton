@@ -1,4 +1,4 @@
-// 智慧之塔关卡 - 执行功能测试
+// Wisdom Tower Level - Executive Function Test
 class TowerLevel extends BaseLevel {
     constructor(game) {
         super(game);
@@ -62,7 +62,7 @@ class TowerLevel extends BaseLevel {
     }
     
     handleClick(x, y) {
-        // 检查是否点击了塔层
+        // Check if clicked on tower level
         const clickedLevel = this.towerLevels.find(level => {
             return x >= level.x && x <= level.x + level.width &&
                    y >= level.y && y <= level.y + level.height;
@@ -71,7 +71,7 @@ class TowerLevel extends BaseLevel {
         if (clickedLevel) {
             this.handleTowerClick(clickedLevel);
         } else {
-            // 点击了空白区域 - 分心事件
+            // Clicked on empty area - distraction event
             this.distractionEvents++;
             this.dataCollector.recordExecutiveData('distractionEvent', 1);
         }
@@ -81,20 +81,20 @@ class TowerLevel extends BaseLevel {
         this.userSequence.push(level.number);
         this.totalAnswers++;
         
-        // 检查是否正确
+        // Check if correct
         const expectedNumber = this.sequence[this.userSequence.length - 1];
         if (level.number === expectedNumber) {
             this.correctAnswers++;
             this.dataCollector.recordExecutiveData('correctAnswer', 1);
             level.isCorrect = true;
             
-            // 检查是否完成当前序列
+            // Check if current sequence completed
             if (this.userSequence.length === this.sequence.length) {
                 this.checkSequenceComplete();
             }
         } else {
             this.dataCollector.recordExecutiveData('wrongAnswer', 1);
-            this.showMessage('错误！重新开始', 'red');
+            this.showMessage('Wrong! Start over', 'red');
             this.resetSequence();
         }
     }
@@ -105,7 +105,7 @@ class TowerLevel extends BaseLevel {
         if (this.currentLevel >= this.maxLevels) {
             this.completeLevel();
         } else {
-            this.showMessage('正确！进入下一层', 'green');
+            this.showMessage('Correct! Next level', 'green');
             setTimeout(() => {
                 this.nextLevel();
             }, 1500);
@@ -152,7 +152,7 @@ class TowerLevel extends BaseLevel {
             } else {
                 this.isShowingSequence = false;
                 this.isUserInput = true;
-                this.showMessage('现在轮到你了！', 'blue');
+                this.showMessage('Your turn now!', 'blue');
             }
         };
         
@@ -160,7 +160,7 @@ class TowerLevel extends BaseLevel {
     }
     
     showMessage(text, color) {
-        // 创建临时消息元素
+        // Create temporary message element
         const message = document.createElement('div');
         message.textContent = text;
         message.style.position = 'absolute';
@@ -183,35 +183,35 @@ class TowerLevel extends BaseLevel {
     update() {
         if (this.isComplete) return;
         
-        // 检查超时
-        if (this.isUserInput && Date.now() - this.startTime > 120000) { // 2分钟超时
+        // Check timeout
+        if (this.isUserInput && Date.now() - this.startTime > 120000) { // 2 minute timeout
             this.completeLevel();
         }
     }
     
     render(ctx) {
-        // 绘制背景
+        // Draw background
         this.drawBackground(ctx);
         
-        // 绘制塔
+        // Draw tower
         this.drawTower(ctx);
         
-        // 绘制塔层
+        // Draw tower levels
         this.drawTowerLevels(ctx);
         
-        // 绘制UI
+        // Draw UI
         this.drawUI(ctx);
     }
     
     drawBackground(ctx) {
-        // 天空背景
+        // Sky background
         const gradient = ctx.createLinearGradient(0, 0, 0, this.canvas.height);
         gradient.addColorStop(0, '#87CEEB');
         gradient.addColorStop(1, '#98FB98');
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // 绘制云朵
+        // Draw clouds
         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
         for (let i = 0; i < 3; i++) {
             const x = 100 + i * 200;
@@ -230,11 +230,11 @@ class TowerLevel extends BaseLevel {
     }
     
     drawTower(ctx) {
-        // 绘制塔身
+        // Draw tower body
         ctx.fillStyle = '#8B4513';
         ctx.fillRect(200, 100, 400, 300);
         
-        // 绘制塔顶
+        // Draw tower top
         ctx.fillStyle = '#654321';
         ctx.beginPath();
         ctx.moveTo(200, 100);
@@ -246,7 +246,7 @@ class TowerLevel extends BaseLevel {
     
     drawTowerLevels(ctx) {
         this.towerLevels.forEach((level, index) => {
-            // 绘制塔层
+            // Draw tower level
             if (level.isActive) {
                 ctx.fillStyle = '#FFD700';
             } else if (level.isCorrect) {
@@ -257,12 +257,12 @@ class TowerLevel extends BaseLevel {
             
             ctx.fillRect(level.x, level.y, level.width, level.height);
             
-            // 绘制边框
+            // Draw border
             ctx.strokeStyle = '#8B4513';
             ctx.lineWidth = 2;
             ctx.strokeRect(level.x, level.y, level.width, level.height);
             
-            // 绘制数字
+            // Draw number
             ctx.fillStyle = '#333';
             ctx.font = 'bold 24px Arial';
             ctx.textAlign = 'center';
@@ -272,35 +272,36 @@ class TowerLevel extends BaseLevel {
     }
     
     drawUI(ctx) {
-        // 绘制进度
+        // Draw progress
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(10, 10, 300, 140);
+        ctx.fillRect(10, 10, 320, 150);
         
         ctx.fillStyle = 'white';
         ctx.font = '16px Arial';
-        ctx.fillText('智慧之塔 - 执行功能测试', 20, 30);
-        ctx.fillText(`当前层数: ${this.currentLevel}/${this.maxLevels}`, 20, 50);
-        ctx.fillText(`正确率: ${this.totalAnswers > 0 ? Math.round(this.correctAnswers/this.totalAnswers*100) : 0}%`, 20, 70);
-        ctx.fillText(`分心次数: ${this.distractionEvents}`, 20, 90);
+        ctx.textAlign = 'left';
+        ctx.fillText('Wisdom Tower - Executive Function Test', 20, 30);
+        ctx.fillText(`Current Level: ${this.currentLevel}/${this.maxLevels}`, 20, 50);
+        ctx.fillText(`Accuracy: ${this.totalAnswers > 0 ? Math.round(this.correctAnswers/this.totalAnswers*100) : 0}%`, 20, 70);
+        ctx.fillText(`Distractions: ${this.distractionEvents}`, 20, 90);
         
         const timeLeft = Math.max(0, 120 - Math.floor((Date.now() - this.startTime) / 1000));
-        ctx.fillText(`剩余时间: ${timeLeft}秒`, 20, 110);
+        ctx.fillText(`Time Left: ${timeLeft}s`, 20, 110);
         
-        // 绘制当前序列
+        // Draw current sequence
         if (this.isUserInput && this.userSequence.length > 0) {
-            ctx.fillText(`已输入: ${this.userSequence.join(', ')}`, 20, 130);
+            ctx.fillText(`Input: ${this.userSequence.join(', ')}`, 20, 130);
         }
         
-        // 绘制提示
+        // Draw hint
         ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.fillRect(350, 10, 200, 40);
+        ctx.fillRect(340, 10, 240, 40);
         ctx.fillStyle = '#333';
         ctx.font = '14px Arial';
         ctx.textAlign = 'center';
         if (this.isShowingSequence) {
-            ctx.fillText('观察数字序列！', 450, 35);
+            ctx.fillText('Watch the number sequence!', 460, 35);
         } else if (this.isUserInput) {
-            ctx.fillText('按顺序点击数字！', 450, 35);
+            ctx.fillText('Click numbers in order!', 460, 35);
         }
         ctx.textAlign = 'left';
     }
@@ -309,7 +310,7 @@ class TowerLevel extends BaseLevel {
         const totalTime = Date.now() - this.startTime;
         const memoryAccuracy = this.totalAnswers > 0 ? this.correctAnswers / this.totalAnswers : 0;
         
-        // 计算分数
+        // Calculate score
         let score = 5;
         if (memoryAccuracy < 0.6) score -= 2;
         else if (memoryAccuracy < 0.8) score -= 1;
@@ -320,7 +321,7 @@ class TowerLevel extends BaseLevel {
         
         score = Math.max(1, score);
         
-        // 记录数据
+        // Record data
         this.dataCollector.recordExecutiveData('completionTime', totalTime / 1000);
         this.dataCollector.recordExecutiveData('memoryAccuracy', memoryAccuracy);
         

@@ -1,4 +1,14 @@
-# 🌍 Little Explorer Adventure
+# Demo 1 Personalized AI-driven Game Platform
+## Deployment
+1. Navigate into the project directory `adhd-playground`
+2. run `npm run dev`
+
+# Demo 2 Eye-tracking Game
+## Deployment
+1. Navigate into the project directory `eye-test`
+2. open the `.html` file
+
+# Demo 3 Little Explorer Adventure
 
 An interactive game designed for ADHD assessment, featuring four engaging levels to evaluate children's attention, organization, impulse control, and executive function.
 
@@ -138,6 +148,8 @@ Based on game performance, the system provides personalized training suggestions
 
 ```
 2025-FEIT-Hackaton/
+├── adhd-playground         # Demo 1 for platform
+├── eye-test                # Demo 2 for eye track test
 ├── index.html              # Main page
 ├── forest.html             # Magic Forest level
 ├── library.html            # Ancient Library level

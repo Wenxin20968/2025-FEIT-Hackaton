@@ -12,34 +12,34 @@
 
 An interactive game designed for ADHD assessment, featuring four engaging levels to evaluate children's attention, organization, impulse control, and executive function.
 
-## 🎮 Game Features
+## Game Features
 
-### 🏞️ Four Exciting Levels
+### Four Exciting Levels
 
-1. **🌲 Magic Forest** - Attention Test
+1. **Magic Forest** - Attention Test
 
    - Follow the guide through the forest
    - Resist distractions from butterflies and small animals
    - Evaluate focus and distraction resistance
 
-2. **📚 Ancient Library** - Organization Test
+2. **Ancient Library** - Organization Test
 
    - Organize backpack and collect school supplies
    - Avoid being distracted by toys and snacks
    - Evaluate task completion and organization skills
 
-3. **🌉 Patience River** - Impulse Control Test
+3. **Patience River** - Impulse Control Test
 
    - Wait for traffic lights and cross the bridge safely
    - Learn to control impulses and develop patience
    - Evaluate impulse control and hyperactivity
 
-4. **🏰 Wisdom Tower** - Executive Function Test
+4. **Wisdom Tower** - Executive Function Test
    - Remember number sequences and light up tower levels in order
    - Train memory and executive function
    - Evaluate memory accuracy and sustained attention
 
-### 📊 Professional Assessment System
+### Professional Assessment System
 
 - **Real-time Data Collection**: Records various metrics during gameplay
 - **ADHD-RS-IV Mapping**: Assessment based on standard scales
@@ -47,14 +47,14 @@ An interactive game designed for ADHD assessment, featuring four engaging levels
 - **Risk Assessment**: Low/Medium/High risk level classification
 - **Professional Recommendations**: Targeted suggestions based on assessment results
 
-### ⭐ Motivation System
+### Motivation System
 
 - **Star System**: Up to 5 stars per level
 - **Badge Rewards**: Earn adventure badges for completing levels
 - **Achievement Titles**: Complete all levels to earn "Little Focus Warrior" title
 - **Progress Tracking**: Real-time display of game progress and achievements
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Running the Game
 
@@ -89,7 +89,7 @@ Simply open `index.html` directly in your browser:
 - **ESC Key**: Return to main menu
 - **Number Keys 1-4**: Quick level selection
 
-## 🎯 Assessment Metrics
+## Assessment Metrics
 
 ### Attention Test (Magic Forest)
 
@@ -119,7 +119,7 @@ Simply open `index.html` directly in your browser:
 - Completion time
 - Memory accuracy
 
-## 📈 Report Interpretation
+## Report Interpretation
 
 ### Risk Levels
 
@@ -144,7 +144,7 @@ Based on game performance, the system provides personalized training suggestions
 - **Accessibility Design**: Supports keyboard operations
 - **Modular Architecture**: Easy to extend and maintain
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 2025-FEIT-Hackaton/
@@ -177,7 +177,7 @@ Based on game performance, the system provides personalized training suggestions
 └── README.md              # Documentation
 ```
 
-## 🎨 Design Philosophy
+## Design Philosophy
 
 ### Gamified Learning
 
@@ -197,7 +197,7 @@ Based on game performance, the system provides personalized training suggestions
 - Clear visual feedback
 - Detailed result reports
 
-## 🔬 Scientific Foundation
+## Scientific Foundation
 
 This game is designed based on the following scientific theories:
 
@@ -206,7 +206,7 @@ This game is designed based on the following scientific theories:
 - **Behavioral Assessment Theory**: Application of standardized assessment tools
 - **Gamified Learning Theory**: Motivation, engagement, learning effectiveness
 
-## 🎯 Key Features
+## Key Features
 
 ### Native Architecture Optimization
 
@@ -229,7 +229,7 @@ This game is designed based on the following scientific theories:
 - **Progress Tracking**: Visual progress indicators and achievements
 - **Accessibility**: Keyboard navigation and screen reader support
 
-## 📞 Technical Support
+## Technical Support
 
 For questions, suggestions, or technical issues:
 
@@ -237,15 +237,15 @@ For questions, suggestions, or technical issues:
 - **Development Team**: Contact RoastDuck team
 - **Documentation**: Refer to this README for setup and usage instructions
 
-## ⚠️ Important Notice
+## Important Notice
 
 **Note**: This game is for preliminary assessment only and cannot replace professional medical diagnosis. For professional diagnosis, please consult relevant medical professionals.
 
-## 🏆 Acknowledgments
+## Acknowledgments
 
 This project is developed for the 2025 FEIT Hackathon, focusing on innovative solutions for ADHD assessment and intervention through gamified learning approaches.
 
-## 📖 Reference
+## Reference
 
 - “Attention-Deficit hyperactivity disorder in adults and children,” Google Books. https://books.google.com.au/books?hl=en&lr=&id=BWW8BQAAQBAJ&oi=fnd&pg=PA16&dq=%22adhd+in+children%22++diagnosis+method&ots=D5BQyYugD7&sig=pISFxVWe5uw5kfp4pAi8mQiUmOA&redir_esc=y#v=onepage&q&f=false
 - X. Chen et al., “Utilizing artificial intelligence-based eye tracking technology for screening ADHD symptoms in children,” Frontiers in Psychiatry, vol. 14, Nov. 2023, doi: 10.3389/fpsyt.2023.1260031.

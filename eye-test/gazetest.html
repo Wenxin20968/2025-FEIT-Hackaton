@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GazeQuest — Eye-Tracking Mini Game (WebGazer)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #22d3ee;
+      --good: #34d399;
+      --bad: #f87171;
+      --warn: #fbbf24;
+    }
+    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 16px; }
+    .card { background: linear-gradient(180deg, #0b1021, #0c1224 60%, #0a0f1f); border: 1px solid #1f2937; border-radius: 16px; padding: 16px; box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+    h1 { margin: 0 0 8px; font-size: 24px; letter-spacing: .3px; }
+    p { color: var(--muted); line-height: 1.6; }
+    .toolbar { display:flex; gap: 8px; align-items:center; flex-wrap: wrap; margin: 12px 0; }
+    button { background: #111827; border: 1px solid #1f2937; color: var(--text); padding: 10px 14px; border-radius: 12px; cursor: pointer; font-weight: 600; }
+    button.primary { background: #0ea5e9; border-color: #38bdf8; color: #081018; }
+    button.good { background: var(--good); color:#062a1d; border-color: #10b981; }
+    button.bad { background: var(--bad); color:#2b0a0a; border-color: #ef4444; }
+    button:disabled { opacity:.6; cursor:not-allowed; }
+
+    #stage { position: relative; width: 100%; height: 520px; background: radial-gradient(1000px 520px at 50% 40%, #141a33, #0b1021 60%); border:1px solid #1f2937; border-radius:16px; overflow:hidden; user-select:none; }
+    .target { position:absolute; width: 64px; height:64px; border-radius:50%; background: radial-gradient(circle at 30% 30%, #7dd3fc, #2563eb); display:flex; align-items:center; justify-content:center; font-weight:800; color:#02121a; box-shadow: 0 8px 16px rgba(37, 99, 235, .35); }
+    .halo { position:absolute; inset:-10px; border-radius:50%; border:3px dashed rgba(125, 211, 252, .6); animation: spin 3s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg);} }
+
+    .distractor { position:absolute; width: 54px; height:54px; display:flex; align-items:center; justify-content:center; border-radius:14px; background:#1f2937; border:1px solid #293548; box-shadow: 0 6px 16px rgba(0,0,0,.25); font-size:26px; }
+
+    .hud { display:flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; font-size: 14px; }
+    .pill { background:#0b1223; border:1px solid #1f2937; padding:6px 10px; border-radius:999px; color:#cbd5e1; }
+    .pill b{ color:#fff; }
+
+    .log { margin-top:12px; height: 140px; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#0a0f1f; border:1px solid #1f2937; border-radius: 12px; padding: 8px 10px; color:#a7b5d1; }
+    .kbd { font-family: ui-monospace, monospace; border:1px solid #293548; padding: 2px 6px; border-radius: 6px; background:#0c1429; color:#bcd0ff; }
+
+    .watermark { position: fixed; right: 10px; bottom: 10px; opacity:.4; font-size: 12px; }
+
+    #gazeDot { position:absolute; width:10px; height:10px; background:#22d3ee; border-radius:50%; pointer-events:none; mix-blend-mode: screen; box-shadow:0 0 12px #22d3ee; opacity:.0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>GazeQuest — Eye-Tracking Mini Game (WebGazer)</h1>
+      <p>How to play: Focus on the <strong>blue circular target</strong> on the stage, <strong>maintain gaze ≥600ms</strong> to “collect” it. Avoid square distractors. Mouse click is supported as fallback (clicking target also counts).
+      <br>Runs locally, no data uploaded; closing the page clears everything.</p>
+      <div class="toolbar">
+        <button id="btnInit" class="primary">① Allow Camera / Start WebGazer</button>
+        <button id="btnCalib" disabled>② Quick Calibrate (Focus center 3s)</button>
+        <button id="btnStart" class="good" disabled>③ Start 60s Game</button>
+        <button id="btnStop" class="bad" disabled>Stop</button>
+      </div>
+
+      <div id="stage" aria-label="game stage">
+        <div id="gazeDot"></div>
+      </div>
+
+      <div class="hud">
+        <div class="pill">Hits: <b id="hit">0</b></div>
+        <div class="pill">Distractions: <b id="distract">0</b></div>
+        <div class="pill">Avg. RT: <b id="rt">—</b></div>
+        <div class="pill">Gaze Stability (Jitter): <b id="jitter">—</b></div>
+        <div class="pill">Remaining: <b id="left">60</b>s</div>
+      </div>
+
+      <div class="log" id="log" aria-live="polite"></div>
+      <div class="watermark">Camera requires <span class="kbd">https://</span> or <span class="kbd">localhost</span>.</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/webgazer/dist/webgazer.min.js"></script>
+  <script>
+  const $ = sel => document.querySelector(sel);
+  const log = (msg) => { const el = $('#log'); el.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}<br>` + el.innerHTML; };
+  const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+
+  const stage = $('#stage');
+  const btnInit = $('#btnInit');
+  const btnCalib = $('#btnCalib');
+  const btnStart = $('#btnStart');
+  const btnStop = $('#btnStop');
+  const hitEl = $('#hit');
+  const distractEl = $('#distract');
+  const rtEl = $('#rt');
+  const jitterEl = $('#jitter');
+  const leftEl = $('#left');
+  const gazeDot = $('#gazeDot');
+
+  let running = false, calibrating = false, timerId = null, t0 = 0;
+  let target = null, halo = null; 
+  let distractors = []; 
+  let dwell = 0, lastSeenOnTarget = false, lastGaze = null;
+  let hits = 0, distractHits = 0, rts = [], jitterBuf = [];
+  let gameDeadline = 0;
+
+  const GAME_DURATION = 60_000; 
+  const DWELL_MS = 600;         
+  const TARGET_R = 32;          
+  const SHOW_GAZE_DOT = false;  
+
+  function rnd(min,max){ return Math.random()*(max-min)+min; }
+
+  function spawnTarget() {
+    if (target) target.remove();
+    target = document.createElement('div');
+    target.className = 'target';
+    target.innerHTML = '★';
+    halo = document.createElement('div');
+    halo.className = 'halo';
+    target.appendChild(halo);
+
+    const pad = 80; 
+    const x = rnd(pad, stage.clientWidth - pad - 64);
+    const y = rnd(pad, stage.clientHeight - pad - 64);
+    target.style.left = x + 'px';
+    target.style.top  = y + 'px';
+    stage.appendChild(target);
+
+    dwell = 0; lastSeenOnTarget = false; t0 = performance.now();
+  }
+
+  function spawnDistractors(n=4){
+    distractors.forEach(d=>d.el.remove());
+    distractors = [];
+    for (let i=0;i<n;i++){
+      const el = document.createElement('div');
+      el.className = 'distractor';
+      el.textContent = ['🪐','🧪','🚀','🌟','🐙','🧊'][i%6];
+      const x = rnd(10, stage.clientWidth-64);
+      const y = rnd(10, stage.clientHeight-64);
+      el.style.left = x+'px';
+      el.style.top  = y+'px';
+      stage.appendChild(el);
+      const vx = rnd(-0.3,0.3), vy = rnd(-0.3,0.3);
+      distractors.push({el, vx, vy});
+    }
+  }
+
+  function moveDistractors(){
+    for (const d of distractors){
+      let x = parseFloat(d.el.style.left); let y = parseFloat(d.el.style.top);
+      x += d.vx; y += d.vy;
+      if (x<0||x>stage.clientWidth-54) d.vx*=-1;
+      if (y<0||y>stage.clientHeight-54) d.vy*=-1;
+      d.el.style.left = clamp(x,0,stage.clientWidth-54)+'px';
+      d.el.style.top  = clamp(y,0,stage.clientHeight-54)+'px';
+    }
+  }
+
+  function rect(el){ const r = el.getBoundingClientRect(); const s = stage.getBoundingClientRect(); return {x:r.left-s.left,y:r.top-s.top,w:r.width,h:r.height}; }
+  function pointInRect(px,py,rc){ return px>=rc.x && px<=rc.x+rc.w && py>=rc.y && py<=rc.y+rc.h; }
+
+  function onGaze(x,y,ts){
+    if (!running) return;
+    if (SHOW_GAZE_DOT){ gazeDot.style.opacity = .9; gazeDot.style.left = (x-5)+'px'; gazeDot.style.top = (y-5)+'px'; }
+    if (lastGaze){ const dx=x-lastGaze.x, dy=y-lastGaze.y; jitterBuf.push(Math.hypot(dx,dy)); if (jitterBuf.length>120) jitterBuf.shift(); }
+    lastGaze = {x,y,ts};
+    for (const d of distractors){
+      const rc = rect(d.el);
+      const inside = pointInRect(x,y,rc);
+      if (inside && !d._inside){ distractHits++; distractEl.textContent = distractHits; d._inside = true; }
+      if (!inside && d._inside) d._inside = false;
+    }
+    if (target){
+      const rc = rect(target);
+      const cx = rc.x + rc.w/2, cy = rc.y + rc.h/2;
+      const dist = Math.hypot(x-cx, y-cy);
+      const onTarget = dist <= TARGET_R;
+      if (onTarget){
+        if (!lastSeenOnTarget){ 
+          const rt = performance.now() - t0; rts.push(rt); rtEl.textContent = Math.round(rts.reduce((a,b)=>a+b,0)/rts.length) + ' ms';
+        }
+        dwell += 16; 
+        lastSeenOnTarget = true;
+      } else {
+        dwell = Math.max(0, dwell - 24); 
+        lastSeenOnTarget = false;
+      }
+      if (dwell >= DWELL_MS){
+        hits++; hitEl.textContent = hits; log(`Hit! RT=${Math.round(rts.at(-1))}ms  Gaze ≥${DWELL_MS}ms`);
+        spawnTarget();
+      }
+    }
+  }
+
+  function updateHUD(){
+    if (!running) return;
+    const now = performance.now();
+    const left = Math.max(0, Math.ceil((gameDeadline-now)/1000));
+    leftEl.textContent = left;
+    if (jitterBuf.length>8){ const avg = jitterBuf.reduce((a,b)=>a+b,0)/jitterBuf.length; jitterEl.textContent = avg.toFixed(1); }
+    moveDistractors();
+    if (now >= gameDeadline){ stopGame(true); }
+  }
+
+  function startLoop(){ timerId = setInterval(updateHUD, 16); }
+  function stopLoop(){ clearInterval(timerId); timerId = null; }
+
+  async function initWebGazer(){
+    try{
+      log('Requesting camera permission and initializing WebGazer…');
+      await webgazer.setRegression('ridge')
+                   .setGazeListener((data, ts)=>{
+                      if(!data) return;
+                      const s = stage.getBoundingClientRect();
+                      const x = clamp(data.x - s.left, 0, s.width);
+                      const y = clamp(data.y - s.top , 0, s.height);
+                      onGaze(x,y,ts);
+                   })
+                   .showVideoPreview(false)
+                   .showPredictionPoints(false)
+                   .begin();
+      btnCalib.disabled = false; btnInit.disabled = true; log(' WebGazer started successfully.');
+    }catch(err){
+      log('Failed to start: '+err);
+      alert('Camera permission and HTTPS/localhost environment required.');
+    }
+  }
+
+  async function quickCalibrate(){
+    calibrating = true; btnCalib.disabled = true; log('Focus on stage center for 3s to quick calibrate…');
+    const cross = document.createElement('div');
+    cross.style.position='absolute'; cross.style.left='50%'; cross.style.top='50%'; cross.style.transform='translate(-50%,-50%)';
+    cross.style.width='14px'; cross.style.height='14px'; cross.style.border='2px solid #22d3ee'; cross.style.borderRadius='50%';
+    stage.appendChild(cross);
+    const tstart = performance.now();
+    const samples = [];
+    const sRect = stage.getBoundingClientRect();
+    function grab(){
+      const pred = webgazer.getCurrentPrediction();
+      if(pred){
+        const x = clamp(pred.x - sRect.left, 0, sRect.width);
+        const y = clamp(pred.y - sRect.top , 0, sRect.height);
+        samples.push({x,y});
+      }
+      if(performance.now()-tstart < 3000){ requestAnimationFrame(grab);} else {
+        cross.remove();
+        calibrating = false; btnStart.disabled = false; log('Calibration complete. You can start the game.');
+      }
+    }
+    requestAnimationFrame(grab);
+  }
+
+  function startGame(){
+    running = true; hits = 0; distractHits = 0; rts = []; jitterBuf = []; lastGaze=null;
+    hitEl.textContent='0'; distractEl.textContent='0'; rtEl.textContent='—'; jitterEl.textContent='—'; leftEl.textContent='60';
+    btnStart.disabled = true; btnStop.disabled = false; log('Game started, focus on the blue circular target!');
+    spawnTarget();
+    spawnDistractors(5);
+    gameDeadline = performance.now() + GAME_DURATION;
+    startLoop();
+  }
+
+  function stopGame(auto=false){
+    running = false; stopLoop(); btnStop.disabled = true; btnStart.disabled = false;
+    if(target) target.remove(); distractors.forEach(d=>d.el.remove()); distractors=[];
+    const meanRT = rts.length? Math.round(rts.reduce((a,b)=>a+b,0)/rts.length) : NaN;
+    const jitter = jitterBuf.length? (jitterBuf.reduce((a,b)=>a+b,0)/jitterBuf.length).toFixed(1) : '—';
+    log(`End: Hits ${hits}, Distractions ${distractHits}, Avg RT ${isNaN(meanRT)?'—':meanRT+'ms'}, Jitter ${jitter}`);
+    alert(`GazeQuest Finished\nHits: ${hits}\nDistractions: ${distractHits}\nAvg RT: ${isNaN(meanRT)?'—':meanRT+'ms'}`);
+  }
+
+  stage.addEventListener('click', (e)=>{
+    if (!running || !target) return;
+    const rc = rect(target); const cx = rc.x + rc.w/2; const cy = rc.y + rc.h/2;
+    const dist = Math.hypot(e.offsetX - cx, e.offsetY - cy);
+    if (dist <= TARGET_R){
+      hits++; hitEl.textContent = hits; rts.push(performance.now()-t0); rtEl.textContent = Math.round(rts.reduce((a,b)=>a+b,0)/rts.length) + ' ms';
+      spawnTarget();
+    }
+  });
+
+  btnInit.addEventListener('click', initWebGazer);
+  btnCalib.addEventListener('click', quickCalibrate);
+  btnStart.addEventListener('click', startGame);
+  btnStop.addEventListener('click', ()=>stopGame(false));
+
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost'){
+    log('Note: To enable camera, please open this page under HTTPS or localhost.');
+  }
+  </script>
+</body>
+</html>

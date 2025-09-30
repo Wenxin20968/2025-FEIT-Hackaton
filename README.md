@@ -233,6 +233,12 @@ For questions, suggestions, or technical issues:
 
 This project is developed for the 2025 FEIT Hackathon, focusing on innovative solutions for ADHD assessment and intervention through gamified learning approaches.
 
+## 📖 Reference
+
+· “Attention-Deficit hyperactivity disorder in adults and children,” Google Books. https://books.google.com.au/books?hl=en&lr=&id=BWW8BQAAQBAJ&oi=fnd&pg=PA16&dq=%22adhd+in+children%22++diagnosis+method&ots=D5BQyYugD7&sig=pISFxVWe5uw5kfp4pAi8mQiUmOA&redir_esc=y#v=onepage&q&f=false
+· X. Chen et al., “Utilizing artificial intelligence-based eye tracking technology for screening ADHD symptoms in children,” Frontiers in Psychiatry, vol. 14, Nov. 2023, doi: 10.3389/fpsyt.2023.1260031.
+· B. L. Trommer, J. B. Hoeppner, R. Lorber, and K. J. Armstrong, “The Go—No‐Go paradigm in attention deficit disorder,” Annals of Neurology, vol. 24, no. 5, pp. 610–614, Nov. 1988, doi: 10.1002/ana.410240504.
+
 ---
 
 **Version**: 2.1.0  

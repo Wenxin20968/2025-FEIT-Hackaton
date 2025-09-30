@@ -1,3 +1,36 @@
+# Project Structure
+
+```
+2025-FEIT-Hackaton/
+├── adhd-playground         # Demo 1 for platform
+├── eye-test                # Demo 2 for eye track test
+├── index.html              # Main page
+├── forest.html             # Magic Forest level
+├── library.html            # Ancient Library level
+├── river.html              # Patience River level
+├── tower.html              # Wisdom Tower level
+├── report.html             # Assessment report
+├── styles.css              # Style file
+├── js/                     # JavaScript files
+│   ├── game.js             # Game core class
+│   ├── data-collection.js  # Data collection system
+│   ├── report-generator.js # Report generator
+│   ├── main.js            # Main entry file
+│   ├── ui-components.js   # UI components
+│   ├── level-page.js      # Level page handler
+│   ├── forest-page.js     # Forest page handler
+│   ├── library-page.js    # Library page handler
+│   ├── river-page.js      # River page handler
+│   ├── tower-page.js      # Tower page handler
+│   ├── report-page.js     # Report page handler
+│   └── levels/            # Level implementations
+│       ├── forest.js      # Magic Forest
+│       ├── library.js     # Ancient Library
+│       ├── river.js       # Patience River
+│       └── tower.js       # Wisdom Tower
+└── README.md              # Documentation
+```
+
 # Demo 1 Personalized AI-driven Game Platform
 ## Deployment
 1. Navigate into the project directory `adhd-playground`
@@ -143,39 +176,6 @@ Based on game performance, the system provides personalized training suggestions
 - **Data Persistence**: Local storage for game progress and statistics
 - **Accessibility Design**: Supports keyboard operations
 - **Modular Architecture**: Easy to extend and maintain
-
-## Project Structure
-
-```
-2025-FEIT-Hackaton/
-├── adhd-playground         # Demo 1 for platform
-├── eye-test                # Demo 2 for eye track test
-├── index.html              # Main page
-├── forest.html             # Magic Forest level
-├── library.html            # Ancient Library level
-├── river.html              # Patience River level
-├── tower.html              # Wisdom Tower level
-├── report.html             # Assessment report
-├── styles.css              # Style file
-├── js/                     # JavaScript files
-│   ├── game.js             # Game core class
-│   ├── data-collection.js  # Data collection system
-│   ├── report-generator.js # Report generator
-│   ├── main.js            # Main entry file
-│   ├── ui-components.js   # UI components
-│   ├── level-page.js      # Level page handler
-│   ├── forest-page.js     # Forest page handler
-│   ├── library-page.js    # Library page handler
-│   ├── river-page.js      # River page handler
-│   ├── tower-page.js      # Tower page handler
-│   ├── report-page.js     # Report page handler
-│   └── levels/            # Level implementations
-│       ├── forest.js      # Magic Forest
-│       ├── library.js     # Ancient Library
-│       ├── river.js       # Patience River
-│       └── tower.js       # Wisdom Tower
-└── README.md              # Documentation
-```
 
 ## Design Philosophy
 
